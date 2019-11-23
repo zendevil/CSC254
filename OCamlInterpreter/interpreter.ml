@@ -422,7 +422,7 @@ let reduce_1_prod (astack:parse_tree list) (rhs_len:int) : parse_tree list =
     | _ -> raise (Failure "expected nonterminal at top of astack") in
   helper astack rhs_len [];;
 
-let sum_ave_prog = "read a read b sum := a + b write sum write sum / 2";;
+let sum_ave_prog = "read a read b sum := (a + b) * 1 write sum write sum / 2";;
 let primes_prog = "
                    read n
                    cp := 2
@@ -564,7 +564,7 @@ let rec ast_ize_P (p:parse_tree) : ast_sl =
 and ast_ize_SL (sl:parse_tree) : ast_sl =
   match sl with
   | PT_nt ("SL", []) -> []
-  | PT_nt ("SL", [stmt; stmtlist]) -> (ast_ize_S (stmt) :: ast_sl (ast_ize_SL (stmtlist)))
+  | PT_nt ("SL", [stmt; stmtlist]) -> (ast_ize_S (stmt) :: ast_ize_SL (stmtlist))
   | _ -> raise (Failure "malformed parse tree in ast_ize_SL")
 
 and ast_ize_S (s:parse_tree) : ast_s =
@@ -574,33 +574,45 @@ and ast_ize_S (s:parse_tree) : ast_s =
   | PT_nt ("S", [PT_term "read"; PT_id id])
     -> AST_read (id)
   | PT_nt ("S", [PT_term "write"; expr])
-    -> AST_write (expr)
+    -> AST_write (ast_ize_expr expr)
   | PT_nt ("S", [PT_term "if"; cond; stmtlist; PT_term "end"])
-    -> AST_if (ast_c (ast_ize_c cond), ast_ize_SL (stmtlist))
-  | PT_nt ("S", [PT_term "while"; PT_nt cond; stmtlist; PT_term "end"])
-    -> AST_while (ast_c (ast_ize_c cond), ast_ize_SL (stmtlist))
+    -> AST_if (ast_ize_C cond, ast_ize_SL stmtlist)
+  | PT_nt ("S", [PT_term "while"; cond; stmtlist; PT_term "end"])
+    -> AST_while (ast_ize_C cond, ast_ize_SL stmtlist)
   | _ -> raise (Failure "malformed parse tree in ast_ize_S")
 
 and ast_ize_expr (e:parse_tree) : ast_e =
   (* e is an E, T, or F parse tree node *)
   match e with
-  (*
-     your code here ...
-   *)
+  | PT_nt ("E", [t; tt])
+    -> ast_ize_expr_tail (ast_ize_expr t) tt
+  | PT_nt ("F", [PT_id id])
+    -> AST_id (id)
+  | PT_nt ("F", [PT_num num])
+    -> AST_num (num)
+  | PT_nt ("F", [PT_term "("; expr; PT_term ")"])
+     -> ast_ize_expr expr
+  | PT_nt ("T", [f; ft])
+    -> ast_ize_expr_tail (ast_ize_expr f) ft
   | _ -> raise (Failure "malformed parse tree in ast_ize_expr")
 
 and ast_ize_expr_tail (lhs:ast_e) (tail:parse_tree) :ast_e =
   (* lhs in an inherited attribute.
      tail is a TT or FT parse tree node *)
   match tail with
-  (*
-     your code here ...
-   *)
+  | PT_nt ("TT", [PT_nt ("ao", [PT_term op]); t; tt])
+    -> AST_binop (op, lhs, (ast_ize_expr_tail (ast_ize_expr t) tt))
+  | PT_nt ("TT", [])
+    -> lhs
+  | PT_nt ("FT", [PT_nt ("mo", [PT_term op]); f; ft])
+    -> AST_binop (op, lhs, (ast_ize_expr_tail (ast_ize_expr f) ft))
+     | PT_nt ("FT", [])
+    -> lhs
   | _ -> raise (Failure "malformed parse tree in ast_ize_expr_tail")
 
 and ast_ize_C (c:parse_tree) : ast_c =
   match c with
-  | PT_nt ("C", [expr_l; PT_nt ("rn", [PT_term op]); expr_r]) -> ast_c (op, expr_l, expr_r) 
+  | PT_nt ("C", [expr_l; PT_nt ("rn", [PT_term op]); expr_r]) -> (op, ast_ize_expr expr_l, ast_ize_expr expr_r)
   | _ -> raise (Failure "malformed parse tree in ast_ize_C")
 ;;
 
@@ -608,15 +620,12 @@ and ast_ize_C (c:parse_tree) : ast_c =
     Interpreter
  *******************************************************************)
 
-type memory = (string * int) list;;
-(*             name   * val         *)
-(* If you do the extra credit, you might want an extra Boolean
-   field in the tuple to indicate whether the value has been used. *)
 
 type value =    (* an integer or an error message *)
   | Value of int
   | Error of string;;
 
+type memory = ( bool * string * value) list;;
 (* concatenate strings, with a space in between if both were nonempty *)
 let str_cat sep a b =
   match (a, b) with
@@ -629,17 +638,37 @@ let str_cat sep a b =
    whitespace-separated words, each of which is subsequently checked
    for valid integer format.
  *)
-let rec interpret (ast:ast_sl) (full_input:string) : string =
-  let inp = split (regexp "[ \t\n\r]+") full_input in
-  let (_, _, _, outp) = interpret_sl ast [] inp [] in
-  (fold_left (str_cat " ") "" outp) ^ "\n"
 
+
+let rec get_unused (m:memory): string =
+  match m with
+  | (b, i, v) :: rest -> (if b then "" else "\nWarning: " ^ i ^ " not used") ^ (get_unused rest)
+  | [] -> "\n"
+
+
+and get_mem (m:memory): string =
+  match m with
+  | (b, i, Value(v)) :: rest -> "(" ^ (string_of_bool b) ^ ", " ^ i ^ ", " ^ (string_of_int v) ^ ") " ^ (get_mem rest)
+  | (b, i, Error(e)) :: rest -> "(" ^ (string_of_bool b) ^ ", " ^ i ^ ", " ^ e ^ ") " ^ (get_mem rest)
+  | [] -> ""
+        
+and interpret (ast:ast_sl) (full_input:string) : string =
+  let inp = split (regexp "[ \t\n\r]+") full_input in
+  let (_, m, _, outp) = interpret_sl ast [] inp [] in
+  (fold_left (str_cat " ") "" outp) ^ "\n" ^ (get_mem m) ^ (get_unused m)
+                             
 and interpret_sl (sl:ast_sl) (mem:memory)
 (inp:string list) (outp:string list)
     : bool * memory * string list * string list =
-  (* ok?   new_mem       new_input     new_output *)
-  (* your code should replace the following line *)
-  (true, mem, inp, outp)
+  match sl with
+  | s :: rest ->
+     let (_, m, i, o) = (interpret_s s mem inp outp) in
+     let (_, sl_m, sl_i, sl_o) = (interpret_sl rest m i o) in
+     (true, sl_m, sl_i, sl_o)
+  | [] -> (true, mem, inp, outp)
+  | _ -> raise (Failure "sl could not be matched")
+     (* ok?   new_mem       new_input     new_output *)
+  
 
 (* NB: the following routine is complete.  You can call it on any
    statement node and it figures out what more specific case to invoke.
@@ -655,45 +684,288 @@ and interpret_s (s:ast_s) (mem:memory)
   | AST_while(cond, sl)  -> interpret_while cond sl mem inp outp
   | AST_error            -> raise (Failure "cannot interpret erroneous tree")
 
+and is_present (id:string) (mem:memory) : bool =
+  match mem with
+  | (b, i, _) :: rest -> if (compare id i) == 0 then true else (is_present id rest)
+  | [] -> false
+
+and change_val (id:string) (v:value) (mem:memory) : (bool * string * value) list =
+  match mem with
+  | (b, i, v_old) :: rest -> if (compare id i) == 0 then ((b, i, v) :: rest) else ((b, i, v_old) :: (change_val id v rest))
+  | [] -> []
+
 and interpret_assign (lhs:string) (rhs:ast_e) (mem:memory)
 (inp:string list) (outp:string list)
     : bool * memory * string list * string list =
-  (* your code should replace the following line *)
-  (true, mem, inp, outp)
+  let (v, m) = (interpret_expr rhs mem) in
+  let changed = (change_val lhs v m) in
+  (true,
+   (if (is_present lhs m) then changed else (true, lhs, v) :: changed) , inp, outp)
 
+and is_used(id:string)(mem:memory) : bool =
+  match mem with
+  | (b, i, v) :: rest -> if (compare id i) == 0 then b else (is_used id rest)
+  | [] -> false
+        
 and interpret_read (id:string) (mem:memory)
 (inp:string list) (outp:string list)
     : bool * memory * string list * string list =
-  (* your code should replace the following line *)
-  (true, mem, inp, outp)
+  match inp with
+ 
+  | c :: rest -> let v =  try (Value (int_of_string c)) with
+                         | Failure _ -> (Error "non-numeric input")
+                         | _ -> (Value (int_of_string c)) in
+                 (match v with
+                 | Value(_) -> (true, ((is_used id mem), id, v) :: mem, rest, outp) 
+                 | Error(msg) -> (true, (false, id, v) :: mem, rest, msg::outp))
+  | [] ->  (false, (false, id, (Value 0)) :: mem, [], outp @ ["unexpected end of input"]) (* We tell which id couldn't be read *)
+  | _ -> raise (Failure "Error in read")
+  
 
 and interpret_write (expr:ast_e) (mem:memory)
 (inp:string list) (outp:string list)
     : bool * memory * string list * string list =
-  (* your code should replace the following line *)
-  (true, mem, inp, outp)
+  let (v, m) = (interpret_expr expr mem) in
+  match v with
+  | Value(i) -> (true, mem, inp, outp@[(string_of_int i)])
+  | Error(i) -> (true, mem, inp, outp@[i])
 
+and eq_v (v1: value) (v2: value) : bool =
+  match v1 with
+  | Value(one) ->
+     (match v2 with
+      | Value(two) -> if one == two then true else false)
+  | Error(one) -> false 
+                   
 and interpret_if (cond:ast_c) (sl:ast_sl) (mem:memory)
 (inp:string list) (outp:string list)
     : bool * memory * string list * string list =
-  (* your code should replace the following line *)
-  (true, mem, inp, outp)
-
+  match cond with
+  | (op, lo, ro) ->
+     let (v, mem) = (interpret_cond (op, lo, ro) mem) in
+     if (eq_v v (Value 1)) then (interpret_sl sl mem inp outp) else (true, mem, inp, outp)
+  | _ -> raise (Failure "if couldn't be matched")
+  
 and interpret_while (cond:ast_c) (sl:ast_sl) (mem:memory)
 (inp:string list) (outp:string list)
     : bool * memory * string list * string list =
-  (* your code should replace the following line *)
-  (true, mem, inp, outp)
+  match cond with
+  | (op, lo, ro) ->
+     let (v, mem) = (interpret_cond (op, lo, ro) mem) in
+     if (eq_v v (Value 1)) then
+       let (_, m, i, o) = (interpret_sl sl mem inp outp) in
+       (interpret_while cond sl m i o)
+     else (true, mem, inp, outp)
+  | _ -> raise (Failure "while couldn't be matched")
 
+(* True union is for checking for unused varialbes when you have two expressions on both sides of an operator. *)
+(* We must reconcile the updates about usage from both the left operand and right operand. This reconciliation is done by true_union.*)
+and true_union (mem1:memory) (mem2:memory) : memory =
+  match mem1 with
+  | (b1, i1, v1) :: rest1 ->
+     (match mem2 with
+     | (b2, _, _) :: rest2 -> (if b1 || b2 then (true, i1, v1) else (false, i1, v1)) :: (true_union rest1 rest2)
+     | [] -> [])
+  | [] -> []
+                   
 and interpret_expr (expr:ast_e) (mem:memory) : value * memory =
-  (* your code should replace the following line *)
-  (Error("code not written yet"), mem)
-
+  match expr with
+  | AST_binop (op, lo, ro) -> let (vl, meml) = (interpret_expr lo mem) in
+                              let (vr, memr) = (interpret_expr ro mem) in
+                              ((get_op op) vl vr, (true_union meml memr))
+  | AST_num num -> (Value (int_of_string num), mem)          
+  | AST_id id -> (
+    match mem with
+    | (b, i, v) :: rest -> if ((compare i id) == 0) then (v, (true, i, v) :: rest) else
+                             let (v_new, mem_new) = (interpret_expr expr rest) in
+                             (v_new, (b, i, v) :: mem_new)
+    | [] -> ((Error (id ^ ": symbol not found")), mem)
+    | _ -> raise (Failure "error in id"))
+  | _ -> raise (Failure "Couldn't interpret expr")                 
+       
+(* Value(0): false,  Value(1): true *)
 and interpret_cond ((op:string), (lo:ast_e), (ro:ast_e)) (mem:memory)
     : value * memory =
-  (* your code should replace the following line *)
-  (Error("code not written yet"), mem)
+  let (vl, ml) = (interpret_expr lo mem) in
+  let (vr, mr) = (interpret_expr ro mem) in
+  (((get_op op) vl vr), mem)
 
+and eq (lo: value) (ro: value) : value =
+  match lo with
+  | Value(l) ->
+     (match ro with
+      | Value (r) -> if l == r then Value(1) else Value(0)
+      | Error(r) -> (Error ""))
+  | Error(l) -> (Error "")
+                  
+and less (lo: value) (ro: value) : value  =
+  match lo with
+  | Value(l) ->
+     (match ro with
+      | Value(r) -> if l < r then Value(1) else Value(0)
+      | Error(r) -> (Error ""))
+  | Error(l) -> (Error "")
+   
+and great (lo: value) (ro: value) : value  =
+  match lo with
+  | Value(l) ->
+     (match ro with
+      | Value(r) -> if l > r then Value(1) else Value(0))
+  | Error(l) -> (Error "")
+    
+and neq (lo: value) (ro: value) : value =
+  match lo with
+  | Value(l) ->
+     (match ro with
+      | Value(r) -> if l != r then Value(1) else Value(0)
+      | Error (r) -> (Error "")
+     )
+  | Error(l) -> (Error "")
+and geq (lo: value) (ro: value) : value =
+  match lo with
+  | Value(l) ->
+     (match ro with
+     | Value(r) -> if l >= r then Value(1) else Value(0)
+     | Error(r) -> (Error "")
+     )
+  | Error(l) -> (Error "")
+and leq (lo: value) (ro: value) : value =
+  match lo with
+  | Value(l) ->
+     (match ro with
+     | Value(r) -> if l <= r then Value(1) else Value(0)
+     | Error(r) -> (Error ""))
+  | Error(l) -> (Error "")
+ 
+and add (lo: value) (ro: value) : value =
+  match lo with
+  | Value(l) ->
+     (match ro with
+      | Value(r) -> Value(l + r)
+      | Error(r) -> (Error ""))
+  | Error(l) -> (Error "") 
+
+and sub (lo: value) (ro: value) : value =
+  match lo with
+  | Value(l) ->
+     (match ro with
+      | Value(r) -> Value(l - r)
+      | Error(r) -> (Error ""))
+  | Error(l) -> (Error "")
+
+and mul (lo: value) (ro: value) : value =
+  match lo with
+  | Value(l) ->
+     (match ro with
+      | Value(r) -> Value(l * r)
+      | Error(r) -> (Error ""))
+  | Error(l) -> (Error "")
+                 
+
+and div (lo: value) (ro: value) : value =
+  match lo with
+  | Value(l) ->
+     (match ro with
+      | Value(r) -> if r == 0 then (Error "divide by zero") else Value(l / r)
+      | Error(r) -> (Error ""))
+  | Error(l) -> (Error "")
+
+(* get_op takes in the symbol from the syntax tree and returns the appropriate function to be applied*)
+and get_op (op:string) : value -> value -> value =
+  match op with
+  | "==" -> (eq)
+  | ">" -> (great)
+  | "<" -> (less)
+  | "!=" -> (neq)
+  | ">=" -> (geq)
+  | "<=" -> (leq)
+
+  | "+" -> (add)
+  | "-" -> (sub)
+  | "*" -> (mul)
+  | "/" -> (div)
+  | _ -> raise (Failure "Uknown operator")
+     
+(*******************************************************************
+    C code generation
+ *******************************************************************)
+(* this function returns a list of all variables in a particular scope*)
+let rec get_ids (st: ast_sl) (ids:string list): string list =
+  match st with
+  | AST_assign (id, expr) :: sl -> if (elem id ids) then (get_ids sl ids) else (id :: get_ids sl ids)
+  | AST_read id :: sl -> if (elem id ids) then (get_ids sl ids) else (id :: get_ids sl ids)
+  | [] -> ids
+  | _ -> ids
+
+(* declares all variables within a scope*)       
+and declare_all (st: ast_sl) (indent:string) (declared:string list): string * (string list) =
+  (get_decl_string (get_ids st []) indent declared)
+
+(* decl_string is basically "int a; int b; int c" etc.*)
+and get_decl_string (sl: string list) (indent: string) (declared: string list) : string * (string list) =
+  match sl with
+  | id :: rest -> if (elem id declared) then ("", declared) else
+                       let (s, d) = (get_decl_string rest indent declared) in
+                       (indent ^ "int " ^ id ^ ";\n"^ s, id :: declared)
+  | [] -> ("", declared)
+
+        
+and elem (id: string) (ids: string list) : bool =
+  match ids with
+  | first :: rest -> if (compare id first) == 0 then true else (elem id rest)
+  | [] -> false
+        
+(* this function converts a syntax stree into a string that is essentially a C program. All the subsequent functions starting with c_ are for generating parts of the C program *)                                   
+and c (st:ast_sl) : string =
+  let indent = "    " in
+  match st with
+  | s :: rest -> let (str, d) = (declare_all st indent []) in
+     "\n#include <stdio.h>\nvoid main() {\n" ^ str ^ (c_s s indent d) ^ (c_sl rest indent d) ^ "\n}\n\n\n\n\n\n"
+  | [] -> ""
+
+and c_s (s: ast_s) (indent: string) (declared:string list): string =
+  match s with
+  | AST_assign(id, expr) -> (c_assign id expr indent) 
+  | AST_read(id)         -> (c_read id indent) 
+  | AST_write(expr)      -> (c_write expr indent)
+  | AST_if(cond, sl)     -> (c_if cond sl indent declared)
+  | AST_while(cond, sl)  -> (c_while cond sl indent declared)
+  | AST_error            -> raise (Failure "cannot interpret erroneous tree")
+
+and c_sl (st:ast_sl) (indent: string) (declared:string list): string =
+  match st with
+  | s :: rest -> (c_s s indent declared) ^ (c_sl rest indent declared)
+  | [] -> ""
+
+and c_assign (id:string) (expr: ast_e) (indent:string): string =
+  "\n"^indent^id ^ " = " ^ (c_expr expr) ^ ";\n"
+                                           
+and c_read (id:string) (indent:string): string =
+  "\n"^indent^"scanf(\"%d\", &" ^ id ^ ");\n"
+
+and c_write (expr:ast_e) (indent:string): string =
+  "\n"^indent^"printf(\"%d\" , " ^ (c_expr expr) ^ ");"
+
+and c_if (cond:ast_c) (sl:ast_sl) (indent:string) (declared: string list): string =
+  let (s, d) = (declare_all sl (indent^"    ") declared) in
+  "\n"^indent^"if(" ^ (c_cond cond) ^ ") {\n" ^ s ^ (c_sl sl (indent^"    ") d) ^indent^"}\n"
+
+and c_while (cond:ast_c) (sl:ast_sl) (indent:string) (declared : string list): string =
+  let (s, d) = (declare_all sl (indent^"    ") declared) in
+  "\n"^indent^"while(" ^ (c_cond cond) ^ ") {\n" ^ s ^ (c_sl sl (indent^"    ") d) ^indent^"}\n"
+
+and c_cond (cond: ast_c) : string =
+  match cond with
+  | (op, lo, ro) -> (c_expr lo) ^ " " ^ op ^ " " ^ (c_expr ro)
+
+and c_expr (expr:ast_e): string =
+  match expr with
+  | AST_binop (op, expr1, expr2) -> (c_expr expr1) ^ " " ^ op ^ " " ^ (c_expr expr2) 
+  | AST_num num -> num
+  | AST_id id -> id
+    
+
+       
 (*******************************************************************
     Testing
  *******************************************************************)
@@ -703,6 +975,9 @@ let sum_ave_syntax_tree = ast_ize_P sum_ave_parse_tree;;
 
 let primes_parse_tree = parse ecg_parse_table primes_prog;;
 let primes_syntax_tree = ast_ize_P primes_parse_tree;;
+
+let my_prog_pt = parse ecg_parse_table "read a b write b";;
+(* let my_prog_st = ast_ize_P my_prog_pt;; *)
 
 let ecg_run prog inp =
   interpret (ast_ize_P (parse ecg_parse_table prog)) inp;;
@@ -721,10 +996,11 @@ let main () =
   let output = ecg_run prog input in
   print_string output;;
 
-(* Sample test cases
+
   print_string (interpret sum_ave_syntax_tree "4 6");
     (* should print "10 5" *)
   print_newline ();
+  
   print_string (interpret primes_syntax_tree "10");
     (* should print "2 3 5 7 11 13 17 19 23 29" *)
   print_newline ();
@@ -739,8 +1015,18 @@ let main () =
   print_newline ();
   print_string (ecg_run "read a read b" "3");
     (* should print "unexpected end of input" *)
-  print_newline ();;
- *)
+  print_newline ();
+  
+  (* Tests for generating C code *)
+  print_string "Generate C code";
+  print_newline();
+  print_string "Sum Avg Program converted to C:";
+  print_newline();
+  print_string (c sum_ave_syntax_tree);;
+  print_string "Primes Program coverted to C:";
+  print_newline();
+  print_string (c primes_syntax_tree);;
 
 (* Execute function "main" iff run as a stand-alone program. *)
 if !Sys.interactive then () else main ();;
+

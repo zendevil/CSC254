@@ -1,0 +1,116 @@
+.inst {
+    font-family: "monospace";
+}
+
+.cross_ref {
+    table-layout: fixed;
+    width: 100%;
+}
+td {
+    width: 0%;
+    text-align: left;
+}
+.inst0 {
+    font-weight: bold;
+}
+.inst1 {
+    font-weight: normal;
+}
+.inst2 {
+    font-weight: normal;
+}
+.inst3 {
+    font-weight: normal;
+}
+.inst31 {
+    font-weight: normal;    
+}
+
+.color1 {
+    background-color: #FCF6CF;
+}
+
+.color2 {
+    background-color: #FEFEF2;
+}
+
+.color3 {
+    background-color: lightgreen;
+}
+
+.color4 {
+    background-color: lightblue;
+    font-weight: normal;
+}
+
+.color5 {
+    background-color: lightyellow;
+    font-weight: normal;
+}
+
+.color6 {
+    background-color: lightcyan;
+    font-weight: normal;
+}
+
+.color7 {
+    background-color: white;
+    font-weight:normal;
+}
+
+.color8 {
+    background-color: lightgray;
+    color: white;
+    font-weight: normal;
+}
+tr {
+    resize: both;
+    word-wrap: break-word;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.empty_row {
+    width: 10% !important;
+    
+}
+
+.type {
+    color: purple;
+}
+
+.keyword {
+    color: orange;
+    font-weight: bold;
+}
+
+.macro {
+    color: blue;
+}
+
+.macro_pred {
+    color: red;
+}
+
+.func {
+    color: magenta;   
+}
+
+.comment {
+    color: darkgreen !important;
+    font-weight: normal !important;
+}
+
+.f_name {
+    color: lightblue;
+}
+
+.namespc {
+    color: violet;
+}
+
+.str {
+    color: maroon;
+}

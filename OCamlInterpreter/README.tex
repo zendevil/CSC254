@@ -1,0 +1,67 @@
+\documentclass[12pt, letterpaper, twoside]{article}
+\usepackage[utf8]{inputenc}
+ \usepackage{listings}
+ \usepackage{color}
+ 
+ \definecolor{dkgreen}{rgb}{0,0.6,0}
+ \definecolor{gray}{rgb}{0.5,0.5,0.5}
+ \definecolor{mauve}{rgb}{0.58,0,0.82}
+ 
+ \lstset{frame=tb,
+ 	language=Java,
+ 	aboveskip=3mm,
+ 	belowskip=3mm,
+ 	showstringspaces=false,
+ 	columns=flexible,
+ 	basicstyle={\small\ttfamily},
+ 	numbers=none,
+ 	numberstyle=\tiny\color{gray},
+ 	keywordstyle=\color{blue},
+ 	commentstyle=\color{dkgreen},
+ 	stringstyle=\color{mauve},
+ 	breaklines=true,
+ 	breakatwhitespace=true,
+ 	tabsize=3
+ }
+\title{CSC 254 Assignment 3: Interpretation}
+\author{Prikshet Sharma}
+\date{\today}
+ 
+\begin{document}
+
+\maketitle
+
+\section {To run}
+In the Ocaml interpreter run
+\begin{lstlisting} 
+# load "str.cma"
+# use "interpreter.ml"
+\end{lstlisting}
+\section{Overview}
+We have implemented the syntax tree generation and the interpretation phases of the calculator language in this assignment. Some extra functions were created like add, sub, great, less etc. Furthermore, get\_op was implemented, which is used in interpret\_expr to get the right operator according to the operator in the syntax tree. For extra credit we have implemented unused-variable warnings and C code generation. \par   
+
+\section {Extra Credit 1: Unused Variable Warnings}
+. Whenever a variable is initialized or read, it is put into the memory as a tuple. The tuple holds three values: a boolean, which indicates whether it has been used or not, a string, represents is the id of the variable, and a value type, which holds the value of the variable. Whenever the variable is used in an expression, we set its corresponding boolean value to true. Of course, since OCaml lists are immutable, we cannot really set the value. Instead we return a new list, that contains only the requisite id's tuple altered. \par
+After we return the memory using the interpret function applied to a calculator language program, we check each element of this memory for tuples that have a boolean value of false. For each of these tuples, we print a warning message that displays the id as well. \par 
+This is implemented in the get\_used function shown as follows:
+\begin{lstlisting}
+get_unused (m:memory): string = 
+match m with                                                                                                                                                                                                                                                                        
+| (b, i, v) :: rest -> (if b then "" else "\nWarning: " ^ i ^ " not used") ^ (get_unused rest)                                                                                                                                                                                      
+| [] -> "\n"      
+\end{lstlisting}
+
+This function is called from a modified interpret function:
+
+\begin{lstlisting}
+interpret (ast:ast_sl) (full_input:string) : string =                                                                                                                                                                                                                                                                     
+let inp = split (regexp "[ \t\n\r]+") full_input in                                                                                                                                                                                                                                                                         
+let (_, m, _, outp) = interpret_sl ast [] inp [] in                                                                                                                                                                                                                                                                         
+(fold_left (str_cat " ") "" outp) ^ "\n" ^ (get_mem m) ^ (get_unused m)   
+\end{lstlisting}
+
+\section {Extra Credit 2: C Code Generation}
+Most of the syntax between both these languages has a simple one-to-one mapping. For example ``a := 4" becomes ``a = 4;" etc. The only thing that we must do is to declare all the variables. For each scope, we declare all the variables that are used in that scope that are not already used in the surrounding scope. The code is also properly indented. 
+\subsection {Limitation}
+We scan the whole list of ids when declaring ids in the beginning. This has a complexity of O(n), where n is the number of ids. This can be reduced to O(1) with a hash table, which wasn't implemented. 
+\end{document}

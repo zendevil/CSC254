@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title> XREF </title><script src="https://code.jquery.com/jquery-1.11.3.min.js"></script><script src="../search.js"></script><link rel="stylesheet" type="text/css"href="../index.css"/></head><body><form>Search: <input type="text" id="search"><a id="sub_btn" href="">Submit</a></form><table class="cross_ref"><tr class="empty_row"><th></th><th></th><th></th><th></th><th></th></tr><tr><th class="color4" id="main">main</th><th></th><th></th><th></th><th></th><th></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color3">./static.cpp</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#include</span> <span class="macro_pred">"<span class="keyword">static</span>.h"
+</span></th></tr><tr class=><th class="inst0">401176</th><th class="inst1">55                   </th><th class="inst2">push</th> <th class="inst3">%rbp</th><th></th><th class="color6"><span class="keyword">int</span> <span class="f_name" id="main">main</span>() {
+</th></tr><tr class=color1><th class="inst0">40117a</th><th class="inst1">e8 8e 00 00 00       </th><th class="inst2">callq</th><th class="inst3">40120d</th><th class="inst31"><a href="#_Z4funcv">_Z4funcv</a></th><th class="color5">  func();
+</th></tr><tr class=color2><th class="inst0">40117f</th><th class="inst1">e8 2a 00 00 00       </th><th class="inst2">callq</th><th class="inst3">4011ae</th><th class="inst31"><a href="#_Z9call_funcv">_Z9call_funcv</a></th><th class="color6">  call_func();
+</th></tr><tr class=color1><th class="inst0">401184</th><th class="inst1">b8 00 00 00 00       </th><th class="inst2">mov</th> <th class="inst3">$0x0,%eax</th><th></th><th class="color5">}
+</th></tr><tr class="empty_row"><th></th><th></th><th></th><th></th><th></th></tr><tr><th class="color4" id="_ZL4funcv">_ZL4funcv</th><th></th><th></th><th></th><th></th><th></th></tr><tr class=color2><th class="inst0">40118b</th><th class="inst1">55                   </th><th class="inst2">push</th> <th class="inst3">%rbp</th><th></th><th class="color5"></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color3">./f2.cpp</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#include</span> <span class="macro_pred">&#60iostream&#62
+</span></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr class=color1><th class="inst0">40118b</th><th class="inst1">55                   </th><th class="inst2">push</th> <th class="inst3">%rbp</th><th></th><th class="color6"><span class="keyword">static</span> <span class="keyword">void</span> <span class="f_name" id="func">func</span>() {
+</th></tr><tr class=color2><th class="inst0">40118f</th><th class="inst1">be 11 20 40 00       </th><th class="inst2">mov</th> <th class="inst3">$0x402011,%esi</th><th></th><th class="color5">  <span class="namespc"><span class="namespc">std</span></span>::cout&#60&#60<span class="str">"File 2"</span>&#60&#60<span class="namespc"><span class="namespc">std</span></span>::endl;
+</th></tr><tr class=color1><th class="inst0">40119e</th><th class="inst1">be 30 10 40 00       </th><th class="inst2">mov</th> <th class="inst3">$0x401030,%esi</th><th></th><th class="color5"></th></tr><tr class=color2><th class="inst0">4011ab</th><th class="inst1">90                   </th><th class="inst2">nop</th> <th class="inst3"></th><th></th><th class="color6">}
+</th></tr><tr class="empty_row"><th></th><th></th><th></th><th></th><th></th></tr><tr><th class="color4" id="_Z9call_funcv">_Z9call_funcv</th><th></th><th></th><th></th><th></th><th></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr class=color1><th class="inst0">4011ae</th><th class="inst1">55                   </th><th class="inst2">push</th> <th class="inst3">%rbp</th><th></th><th class="color5"><span class="keyword">void</span> <span class="f_name" id="call_func">call_func</span>() {
+</th></tr><tr class=color2><th class="inst0">4011b2</th><th class="inst1">e8 d4 ff ff ff       </th><th class="inst2">callq</th><th class="inst3">40118b</th><th class="inst31"><a href="#_ZL4funcv">_ZL4funcv</a></th><th class="color6">  func();
+</th></tr><tr class=color1><th class="inst0">4011b7</th><th class="inst1">90                   </th><th class="inst2">nop</th> <th class="inst3"></th><th></th><th class="color5">}
+</th></tr><tr class="empty_row"><th></th><th></th><th></th><th></th><th></th></tr><tr><th class="color4" id="_Z41__static_initialization_and_destruction_0ii">_Z41__static_initialization_and_destruction_0ii</th><th></th><th></th><th></th><th></th><th></th></tr><tr class=color2><th class="inst0">401230</th><th class="inst1">55                   </th><th class="inst2">push</th> <th class="inst3">%rbp</th><th></th><th class="color5"></th></tr><tr class=color1><th class="inst0">40123e</th><th class="inst1">83 7d fc 01          </th><th class="inst2">cmpl</th> <th class="inst3">$0x1,-0x4(%rbp)</th><th></th><th class="color5"></th></tr><tr class=color2><th class="inst0">401244</th><th class="inst1">81 7d f8 ff ff 00 00 </th><th class="inst2">cmpl</th> <th class="inst3">$0xffff,-0x8(%rbp)</th><th></th><th class="color5"></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color3">/usr/include/c++/9/iostream</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ Standard\ iostream\ objects\ \-\*\-\ C\ \-\*\-</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ Copyright\ \(C\)\ 1997\-2019\ Free\ Software\ Foundation,\ Inc\.</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ This\ file\ is\ part\ of\ the\ GNU\ ISO\ C\ Library\.\ \ This\ library\ is\ free</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ software;\ you\ can\ redistribute\ it\ <span class="keyword">and</span>/<span class="keyword">or</span>\ modify\ it\ under\ the</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ terms\ of\ the\ GNU\ General\ Public\ License\ as\ published\ by\ the</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ Free\ Software\ Foundation;\ either\ version\ 3,\ <span class="keyword">or</span>\ \(at\ your\ option\)</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ any\ later\ version\.</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ This\ library\ is\ distributed\ in\ the\ hope\ that\ it\ will\ be\ useful,</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ but\ WITHOUT\ ANY\ WARRANTY;\ without\ even\ the\ implied\ warranty\ of</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ MERCHANTABILITY\ <span class="keyword">or</span>\ FITNESS\ FOR\ A\ PARTICULAR\ PURPOSE\.\ \ See\ the</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ GNU\ General\ Public\ License\ <span class="keyword">for</span>\ more\ details\.</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ Under\ Section\ 7\ of\ GPL\ version\ 3,\ you\ are\ granted\ additional</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ permissions\ described\ in\ the\ GCC\ Runtime\ Library\ Exception,\ version</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ 3\.1,\ as\ published\ by\ the\ Free\ Software\ Foundation\.</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ You\ should\ have\ received\ a\ copy\ of\ the\ GNU\ General\ Public\ License\ <span class="keyword">and</span></span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ a\ copy\ of\ the\ GCC\ Runtime\ Library\ Exception\ along\ with\ <span class="keyword">this</span>\ program;</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ see\ the\ files\ COPYING3\ <span class="keyword">and</span>\ COPYING\.RUNTIME\ respectively\.\ \ If\ <span class="keyword">not</span>,\ see</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">// &#60http:<span class="comment">//www\.gnu\.org/licenses/&\#62\.</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">/** @file include/iostream
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"> *  This is a Standard C++ Library header.
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"> */
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//\ ISO\ C\ 14882:\ 27\.3\ \ Standard\ iostream\ objects</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="comment">//</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#ifndef</span> <span class="macro_pred">_GLIBCXX_IOSTREAM
+</span></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#define</span> <span class="macro_pred">_GLIBCXX_IOSTREAM <span class="macro_pred">_GLIBCXX_IOSTREAM 1
+</span></span> <span class="macro_pred">_GLIBCXX_IOSTREAM 1
+</span></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#pragma</span> <span class="macro_pred">GCC <span class="macro_pred">GCC system_header
+</span></span> <span class="macro_pred">GCC system_header
+</span></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#include</span> <span class="macro_pred">&#60bits/c++config.h&#62
+</span></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#include</span> <span class="macro_pred">&#60ostream&#62
+</span></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#include</span> <span class="macro_pred">&#60istream&#62
+</span></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="keyword">namespace</span> std _GLIBCXX_VISIBILITY(<span class="keyword">default</span>)
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">{
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">_GLIBCXX_BEGIN_NAMESPACE_VERSION
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  /**
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *  @name Standard Stream Objects
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *  The &lt;iostream&gt; header declares the eight &#60em&#62standard stream
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *  objects&#60/em&#62.  For other declarations, see
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *  http:<span class="comment">//gcc\.gnu\.org/onlinedocs/libstdc/manual/io\.html</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *  <span class="keyword">and</span> the @link iosfwd I/O forward declarations @endlink
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *  They are required by <span class="keyword">default</span> to cooperate with the global C
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *  library's @c FILE streams, <span class="keyword">and</span> to be available during program
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *  startup <span class="keyword">and</span> termination. For more information, see the section of the
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">   *  manual linked to above.
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  */
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="comment">//@\{</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="keyword">extern</span> istream cin;		/<span class="comment">//\ Linked\ to\ standard\ input</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="keyword">extern</span> ostream cout;		/<span class="comment">//\ Linked\ to\ standard\ output</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="keyword">extern</span> ostream cerr;		/<span class="comment">//\ Linked\ to\ standard\ error\ \(unbuffered\)</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="keyword">extern</span> ostream clog;		/<span class="comment">//\ Linked\ to\ standard\ error\ \(buffered\)</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#ifdef</span> <span class="macro_pred">_GLIBCXX_USE_WCHAR_T
+</span></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="keyword">extern</span> wistream wcin;		/<span class="comment">//\ Linked\ to\ standard\ input</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="keyword">extern</span> wostream wcout;	/<span class="comment">//\ Linked\ to\ standard\ output</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="keyword">extern</span> wostream wcerr;	/<span class="comment">//\ Linked\ to\ standard\ error\ \(unbuffered\)</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="keyword">extern</span> wostream wclog;	/<span class="comment">//\ Linked\ to\ standard\ error\ \(buffered\)</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">#endif
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="comment">//@\}</span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">  <span class="comment">//\ For\ construction\ of\ filebuffers\ <span class="keyword">for</span>\ cout,\ cin,\ cerr,\ clog\ et\.\ al\.</span>
+</th></tr><tr class=color1><th class="inst0">40124d</th><th class="inst1">bf 72 41 40 00       </th><th class="inst2">mov</th> <th class="inst3">$0x404172,%edi</th><th></th><th class="color6">  <span class="keyword">static</span> ios_<span class="namespc">base</span>::Init __ioinit;
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color3">./f2.cpp</th></tr><tr class=color2><th class="inst0">40126b</th><th class="inst1">90                   </th><th class="inst2">nop</th> <th class="inst3"></th><th></th><th class="color8">}
+</th></tr><tr class="empty_row"><th></th><th></th><th></th><th></th><th></th></tr><tr><th class="color4" id="_GLOBAL__sub_I__Z9call_funcv">_GLOBAL__sub_I__Z9call_funcv</th><th></th><th></th><th></th><th></th><th></th></tr><tr class=color1><th class="inst0">4011f8</th><th class="inst1">55                   </th><th class="inst2">push</th> <th class="inst3">%rbp</th><th></th><th class="color5"></th></tr><tr class=color2><th class="inst0">4011fc</th><th class="inst1">be ff ff 00 00       </th><th class="inst2">mov</th> <th class="inst3">$0xffff,%esi</th><th></th><th class="color5"></th></tr><tr class="empty_row"><th></th><th></th><th></th><th></th><th></th></tr><tr><th class="color4" id="_Z4funcv">_Z4funcv</th><th></th><th></th><th></th><th></th><th></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#include</span> <span class="macro_pred">&#60iostream&#62
+</span></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr class=color1><th class="inst0">40120d</th><th class="inst1">55                   </th><th class="inst2">push</th> <th class="inst3">%rbp</th><th></th><th class="color8"><span class="keyword">static</span> <span class="keyword">void</span> <span class="f_name" id="func">func</span>() {
+</th></tr><tr class=color2><th class="inst0">401211</th><th class="inst1">be 19 20 40 00       </th><th class="inst2">mov</th> <th class="inst3">$0x402019,%esi</th><th></th><th class="color8">  <span class="namespc"><span class="namespc">std</span></span>::cout&#60&#60<span class="str">"File 2"</span>&#60&#60<span class="namespc"><span class="namespc">std</span></span>::endl;
+</th></tr><tr class=color1><th class="inst0">401220</th><th class="inst1">be 30 10 40 00       </th><th class="inst2">mov</th> <th class="inst3">$0x401030,%esi</th><th></th><th class="color5"></th></tr><tr class=color2><th class="inst0">40122d</th><th class="inst1">90                   </th><th class="inst2">nop</th> <th class="inst3"></th><th></th><th class="color8">}
+</th></tr><tr class="empty_row"><th></th><th></th><th></th><th></th><th></th></tr><tr><th class="color4" id="_GLOBAL__sub_I__Z4funcv">_GLOBAL__sub_I__Z4funcv</th><th></th><th></th><th></th><th></th><th></th></tr><tr class=color1><th class="inst0">40126e</th><th class="inst1">55                   </th><th class="inst2">push</th> <th class="inst3">%rbp</th><th></th><th class="color6"></th></tr><tr class=color2><th class="inst0">401272</th><th class="inst1">be ff ff 00 00       </th><th class="inst2">mov</th> <th class="inst3">$0xffff,%esi</th><th></th><th class="color6"></th></tr><tr class=color1><th class="inst0">401283</th><th class="inst1">66 2e 0f 1f 84 00 00 </th><th class="inst2">nopw</th> <th class="inst3">%cs:0x0(%rax,%rax,1)</th><th></th><th class="color6"></th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color3">/usr/include/c++/9/iostream</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">_GLIBCXX_END_NAMESPACE_VERSION
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">} <span class="comment">//\ <span class="keyword">namespace</span></span>
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7">
+</th></tr><tr><th></th><th></th><th></th><th></th><th></th><th class="color7"><span class="macro">#endif</span> <span class="macro_pred">/* <span class="macro_pred">/* _GLIBCXX_IOSTREAM <span class="macro_pred">/* _GLIBCXX_IOSTREAM */
+</span></span> <span class="macro_pred">/* _GLIBCXX_IOSTREAM */
+</span></span> <span class="macro_pred">/* _GLIBCXX_IOSTREAM <span class="macro_pred">/* _GLIBCXX_IOSTREAM */
+</span></span> <span class="macro_pred">/* _GLIBCXX_IOSTREAM */
+</span></th></tr></table></body></html>

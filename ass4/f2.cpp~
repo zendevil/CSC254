@@ -1,0 +1,6 @@
+#include <iostream>
+#include "f2.h"
+
+static void func() {
+  std::cout<<"File 2"<<std::endl;
+}

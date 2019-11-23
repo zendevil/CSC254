@@ -1,0 +1,8 @@
+$('body, body *')
+    .contents()
+    .filter(function() {
+        return this.nodeType == Node.TEXT_NODE
+            && this.nodeValue.indexOf('return') >= 0;
+    }).each(function() {
+        this.css({color: blue;})
+    });

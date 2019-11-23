@@ -1,0 +1,12 @@
+#include <iostream>
+#include "f2.h"
+
+static void func() {
+  std::cout<<"File 1"<<std::endl;
+}
+
+int main() {
+
+  f1::func();
+  f2::func();
+}

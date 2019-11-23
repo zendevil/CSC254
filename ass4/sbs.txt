@@ -1,0 +1,451 @@
+4012d6     55                    push %rbp     vector<string> to_return;
+4012ef     83 bd c4 fe ff ff 01  cmpl $0x1,-0x13c(%rbp)     to_return.push_back("(.)");
+4012fc     48 8d 85 d0 fe ff ff  lea -0x130(%rbp),%rax     return to_return;
+40130b     48 8d 85 5f ff ff ff  lea -0xa1(%rbp),%rax   }
+401335     48 8d 95 30 ff ff ff  lea -0xd0(%rbp),%rdx   }
+40134e     48 8d 85 30 ff ff ff  lea -0xd0(%rbp),%rax   }
+40136c     48 8d 95 d0 fe ff ff  lea -0x130(%rbp),%rdx   vector<string> strings;
+401385     48 8d 85 d0 fe ff ff  lea -0x130(%rbp),%rax     return to_return;
+401399     48 8d 85 10 ff ff ff  lea -0xf0(%rbp),%rax   for (int i = 0; i < prev_strings.size(); i++) {
+4013a8     8b 85 c4 fe ff ff     mov -0x13c(%rbp),%eax     strings.push_back("(" + prev_strings[i] + ".)");
+4013c2     c7 45 ec 00 00 00 00  movl $0x0,-0x14(%rbp)     strings.push_back("(." + prev_strings[i] + ")");
+4013c9     8b 45 ec              mov -0x14(%rbp),%eax     strings.push_back("(." + prev_strings[i] + ")");
+4013cf     48 8d 85 f0 fe ff ff  lea -0x110(%rbp),%rax     strings.push_back("(." + prev_strings[i] + ")");
+4013de     48 39 c3              cmp %rax,%rbx     strings.push_back("(." + prev_strings[i] + ")");
+4013ec     8b 45 ec              mov -0x14(%rbp),%eax   }
+401407     48 8d 45 80           lea -0x80(%rbp),%rax   }
+401418     48 8d 85 60 ff ff ff  lea -0xa0(%rbp),%rax   }
+401433     48 8d 95 60 ff ff ff  lea -0xa0(%rbp),%rdx   }
+40144c     48 8d 85 60 ff ff ff  lea -0xa0(%rbp),%rax   }
+40145b     48 8d 45 80           lea -0x80(%rbp),%rax   }
+401467     8b 45 ec              mov -0x14(%rbp),%eax   return strings;
+401482     48 8d 45 c0           lea -0x40(%rbp),%rax   return strings;
+401493     48 8d 45 a0           lea -0x60(%rbp),%rax   return strings;
+4014ab     48 8d 55 a0           lea -0x60(%rbp),%rdx   return strings;
+4014c1     48 8d 45 a0           lea -0x60(%rbp),%rax   return strings;
+4014cd     48 8d 45 c0           lea -0x40(%rbp),%rax   return strings;
+4014d9     83 45 ec 01           addl $0x1,-0x14(%rbp)     strings.push_back("(." + prev_strings[i] + ")");
+4014e2     48 8d 95 10 ff ff ff  lea -0xf0(%rbp),%rdx 
+4014fb     48 8d 85 f0 fe ff ff  lea -0x110(%rbp),%rax     strings.push_back("(" + prev_strings[i] + ".)");
+40150a     48 8d 85 10 ff ff ff  lea -0xf0(%rbp),%rax   for (int i = 0; i < prev_strings.size(); i++) {
+401521     48 8d 85 30 ff ff ff  lea -0xd0(%rbp),%rax   }
+401535     48 8d 85 5f ff ff ff  lea -0xa1(%rbp),%rax   }
+401544     48 8d 85 d0 fe ff ff  lea -0x130(%rbp),%rax     return to_return;
+401561     48 8d 85 60 ff ff ff  lea -0xa0(%rbp),%rax   }
+401575     48 8d 45 80           lea -0x80(%rbp),%rax   }
+401586     48 8d 45 a0           lea -0x60(%rbp),%rax   return strings;
+401597     48 8d 45 c0           lea -0x40(%rbp),%rax   return strings;
+4015a8     48 8d 85 f0 fe ff ff  lea -0x110(%rbp),%rax     strings.push_back("(" + prev_strings[i] + ".)");
+4015bc     48 8d 85 10 ff ff ff  lea -0xf0(%rbp),%rax   for (int i = 0; i < prev_strings.size(); i++) {
+4015d6     48 8b 85 c8 fe ff ff  mov -0x138(%rbp),%rax int main() {
+4015e7     55                    push %rbp   int n;
+4015f0     be 1f 30 40 00        mov $0x40301f,%esi   cin >> n;
+4015ff     48 8d 45 e8           lea -0x18(%rbp),%rax   for(int i; i < result.size(); i++) {
+401610     8b 55 e8              mov -0x18(%rbp),%edx     cout << result[i] << endl;
+401621     8b 45 ec              mov -0x14(%rbp),%eax   }
+401627     48 8d 45 d0           lea -0x30(%rbp),%rax   }
+401633     48 39 c3              cmp %rax,%rbx   }
+40163d     8b 45 ec              mov -0x14(%rbp),%eax   return 0;
+40165f     be 60 10 40 00        mov $0x401060,%esi   return 0;
+40166c     83 45 ec 01           addl $0x1,-0x14(%rbp)   }
+401672     bb 00 00 00 00        mov $0x0,%ebx 401677     48 8d 45 d0           lea -0x30(%rbp),%rax     cout << result[i] << endl;
+4016a1     48 83 c4 28           add $0x28,%rsp 4016a8     55                    push %rbp 4016b6     83 7d fc 01           cmpl $0x1,-0x4(%rbp) 4016bc     81 7d f8 ff ff 00 00  cmpl $0xffff,-0x8(%rbp) 4016c5     bf 39 63 40 00        mov $0x406339,%edi _GLIBCXX_END_NAMESPACE_VERSION
+4016e3     90                    nop  4016e6     55                    push %rbp 4016ea     be ff ff 00 00        mov $0xffff,%esi 4016fb     55                    push %rbp 401707     48 8b 45 f0           mov -0x10(%rbp),%rax { return __p; }
+40170b     5d                    pop %rbp { return __p; }
+40170d     55                    push %rbp #if __cplusplus >= 201703L
+401715     48 8b 45 f8           mov -0x8(%rbp),%rax 
+401737     5d                    pop %rbp       static _GLIBCXX17_CONSTEXPR const char_type*
+401739     90                    nop        static _GLIBCXX17_CONSTEXPR const char_type*
+40173a     55                    push %rbp       {
+401746     48 8b 45 f8           mov -0x8(%rbp),%rax       {
+401755     90                    nop        {
+401756     55                    push %rbp       _Vector_base() { }
+401762     48 8b 45 f8           mov -0x8(%rbp),%rax       _Vector_base() { }
+401771     90                    nop        _Vector_base() { }
+401772     55                    push %rbp       vector() { }
+40177e     48 8b 45 f8           mov -0x8(%rbp),%rax       vector() { }
+40178d     90                    nop        vector() { }
+40178e     55                    push %rbp       // Kept for ABI compatibility.
+40179e     48 8b 45 f8           mov -0x8(%rbp),%rax       // Kept for ABI compatibility.
+4017b4     55                    push %rbp       /// Copy constructor with alternative allocator
+4017c4     48 8b 45 f8           mov -0x8(%rbp),%rax       /// Copy constructor with alternative allocator
+4017da     55                    push %rbp 	: _Tp_alloc_type()
+4017e6     48 8b 45 f8           mov -0x8(%rbp),%rax 
+4017fe     90                    nop  	_Vector_impl(_Tp_alloc_type const& __a) _GLIBCXX_NOEXCEPT
+401801     90                    nop  	_Vector_impl(_Tp_alloc_type const& __a) _GLIBCXX_NOEXCEPT
+401802     55                    push %rbp       friend bool
+40180e     48 8b 45 f8           mov -0x8(%rbp),%rax       friend bool
+40181d     90                    nop        friend bool
+40181e     55                    push %rbp 	_M_deallocate(_M_impl._M_start,
+40182a     48 8b 45 f8           mov -0x8(%rbp),%rax 
+401832     48 8b 45 f8           mov -0x8(%rbp),%rax 
+401839     48 29 c2              sub %rax,%rdx 
+401843     48 89 c2              mov %rax,%rdx       }
+40185c     48 8b 45 f8           mov -0x8(%rbp),%rax     public:
+40186b     90                    nop      public:
+40186c     55                    push %rbp 	std::_Destroy(this->_M_impl._M_start, this->_M_impl._M_finish,
+401878     48 8b 45 f8           mov -0x8(%rbp),%rax       }
+401887     48 8b 45 f8           mov -0x8(%rbp),%rax 	_GLIBCXX_ASAN_ANNOTATE_BEFORE_DEALLOC;
+4018a1     48 8b 45 f8           mov -0x8(%rbp),%rax       /**
+4018b0     55                    push %rbp 
+4018c0     48 8b 45 f0           mov -0x10(%rbp),%rax       template<typename... _Args>
+4018cf     48 8b 45 f8           mov -0x8(%rbp),%rax       template<typename... _Args>
+4018de     90                    nop        template<typename... _Args>
+4018e1     90                    nop        template<typename... _Args>
+4018e2     55                    push %rbp 	{ }
+4018f3     48 8b 45 e0           mov -0x20(%rbp),%rax 
+401902     48 8b 45 e8           mov -0x18(%rbp),%rax 
+401915     48 8b 45 e0           mov -0x20(%rbp),%rax 
+401921     48 89 c6              mov %rax,%rsi 
+40192c     90                    nop  	_Vector_impl(_Tp_alloc_type&& __a) noexcept
+401934     55                    push %rbp 
+40193c     48 8b 45 f8           mov -0x8(%rbp),%rax       /**  Returns the size() of the largest possible %vector.  */
+401944     48 8b 45 f8           mov -0x8(%rbp),%rax       /**  Returns the size() of the largest possible %vector.  */
+40194b     48 29 c2              sub %rax,%rdx       /**  Returns the size() of the largest possible %vector.  */
+401955     5d                    pop %rbp       /**  Returns the size() of the largest possible %vector.  */
+401957     90                    nop        /**  Returns the size() of the largest possible %vector.  */
+401958     55                    push %rbp 	__glibcxx_requires_subscript(__n);
+401964     48 8b 45 f8           mov -0x8(%rbp),%rax 
+40196b     48 8b 55 f0           mov -0x10(%rbp),%rdx 
+401973     48 01 d0              add %rdx,%rax 
+401976     5d                    pop %rbp       /**
+401978     55                    push %rbp     {
+40198d     48 8b 45 d0           mov -0x30(%rbp),%rax       __str.reserve(__len + __rhs.size());
+40199d     48 8b 45 d8           mov -0x28(%rbp),%rax       __str.append(__lhs, __len);
+4019a9     48 8b 45 c8           mov -0x38(%rbp),%rax       __str.append(__rhs);
+4019b5     48 8b 55 e8           mov -0x18(%rbp),%rdx       __str.append(__rhs);
+4019cb     48 8b 55 e8           mov -0x18(%rbp),%rdx       return __str;
+4019e2     48 8b 55 c8           mov -0x38(%rbp),%rdx     }
+4019f5     eb 1a                 jmp 401a11 <_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_RKS8_+0x99>
+401a11     48 8b 45 d8           mov -0x28(%rbp),%rax   template<typename _CharT, typename _Traits, typename _Alloc>
+401a1c     55                    push %rbp     { return std::move(__lhs.append(__rhs)); }
+401a30     48 8b 55 e8           mov -0x18(%rbp),%rdx   template<typename _CharT, typename _Traits, typename _Alloc>
+401a4e     48 8b 45 f8           mov -0x8(%rbp),%rax   template<typename _CharT, typename _Traits, typename _Alloc>
+401a5d     48 8b 45 f8           mov -0x8(%rbp),%rax   template<typename _CharT, typename _Traits, typename _Alloc>
+401a63     55                    push %rbp 
+401a6b     48 8b 45 f8           mov -0x8(%rbp),%rax 
+401a6f     5d                    pop %rbp 
+401a71     90                    nop  
+401a72     55                    push %rbp       _GLIBCXX20_CONSTEXPR
+401a7e     48 8b 45 f8           mov -0x8(%rbp),%rax       _GLIBCXX20_CONSTEXPR
+401a8a     90                    nop        _GLIBCXX20_CONSTEXPR
+401a8d     90                    nop        _GLIBCXX20_CONSTEXPR
+401a8e     55                    push %rbp 	{ }
+401a96     48 8b 45 f8           mov -0x8(%rbp),%rax 
+401ab9     90                    nop  #if __cplusplus >= 201103L
+401abc     55                    push %rbp       pointer
+401ac4     90                    nop        pointer
+401ac7     90                    nop        pointer
+401ac8     55                    push %rbp 	typedef __gnu_cxx::__alloc_traits<_Tp_alloc_type> _Tr;
+401adc     48 83 7d f0 00        cmpq $0x0,-0x10(%rbp)       }
+401ae3     48 8b 45 f8           mov -0x8(%rbp),%rax 
+401ae7     48 8b 55 e8           mov -0x18(%rbp),%rdx 
+401afa     90                    nop      protected:
+401afd     90                    nop      protected:
+401afe     55                    push %rbp 
+401b06     48 8b 45 f8           mov -0x8(%rbp),%rax       const _Tp_alloc_type&
+401b0a     5d                    pop %rbp       const _Tp_alloc_type&
+401b0c     55                    push %rbp     {
+401b20     48 8b 55 f0           mov -0x10(%rbp),%rdx 
+401b33     90                    nop  #if __cplusplus > 201402L
+401b36     55                    push %rbp       {
+401b47     48 8b 45 e8           mov -0x18(%rbp),%rax 	    _GLIBCXX_ASAN_ANNOTATE_GROW(1);
+401b4f     48 8b 45 e8           mov -0x18(%rbp),%rax 	    _GLIBCXX_ASAN_ANNOTATE_GROW(1);
+401b57     48 39 c2              cmp %rax,%rdx 	    _GLIBCXX_ASAN_ANNOTATE_GROW(1);
+401b5c     48 8b 45 e0           mov -0x20(%rbp),%rax 	    ++this->_M_impl._M_finish;
+401b73     48 8b 45 e8           mov -0x18(%rbp),%rax 	    ++this->_M_impl._M_finish;
+401b77     48 89 ce              mov %rcx,%rsi 	    ++this->_M_impl._M_finish;
+401b82     48 8b 45 e8           mov -0x18(%rbp),%rax 	  }
+401b8a     48 8d 50 20           lea (%rax),%rdx 	  }
+401b96     eb 30                 jmp 401bc8 <_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE12emplace_backIJS5_EEEvDpOT_+0x92>
+401b98     48 8b 45 e0           mov -0x20(%rbp),%rax 	return back();
+401bc8     90                    nop  
+401bd0     55                    push %rbp 
+401bd8     48 8b 45 f8           mov -0x8(%rbp),%rax 
+401bdc     5d                    pop %rbp 
+401bde     55                    push %rbp 
+401bee     48 8b 55 f0           mov -0x10(%rbp),%rdx #if __cplusplus >= 201103L
+401c01     90                    nop  #if __cplusplus >= 201103L
+401c04     55                    push %rbp 	  _M_end_of_storage(__x._M_end_of_storage)
+401c10     48 8b 45 f0           mov -0x10(%rbp),%rax 	{ __x._M_start = __x._M_finish = __x._M_end_of_storage = pointer(); }
+401c17     48 8b 45 f8           mov -0x8(%rbp),%rax #endif
+401c1e     48 8b 45 f0           mov -0x10(%rbp),%rax 	{ __x._M_start = __x._M_finish = __x._M_end_of_storage = pointer(); }
+401c26     48 8b 45 f8           mov -0x8(%rbp),%rax #endif
+401c2e     48 8b 45 f0           mov -0x10(%rbp),%rax #endif
+401c36     48 8b 45 f8           mov -0x8(%rbp),%rax #endif
+401c3e     48 8b 45 f0           mov -0x10(%rbp),%rax 
+401c4a     48 8b 45 f0           mov -0x10(%rbp),%rax 
+401c52     48 8b 45 f0           mov -0x10(%rbp),%rax 
+401c5a     48 8b 45 f0           mov -0x10(%rbp),%rax 
+401c62     48 8b 45 f0           mov -0x10(%rbp),%rax 
+401c69     90                    nop  
+401c6c     55                    push %rbp       _GLIBCXX20_CONSTEXPR
+401c74     90                    nop        _GLIBCXX20_CONSTEXPR
+401c77     55                    push %rbp 
+401c8b     48 8b 55 e8           mov -0x18(%rbp),%rdx       /**
+401ca2     90                    nop        /**
+401ca5     55                    push %rbp       typedef typename iterator_traits<_ForwardIterator>::value_type
+401cb5     48 8b 55 f0           mov -0x10(%rbp),%rdx 
+401cc8     90                    nop    template<bool>
+401ccb     55                    push %rbp 
+401cd3     48 8b 45 f8           mov -0x8(%rbp),%rax   /**
+401cd7     5d                    pop %rbp   /**
+401cd9     55                    push %rbp 	{ __a.construct(__p, std::forward<_Args>(__args)...); }
+401ced     48 8b 45 e8           mov -0x18(%rbp),%rax       /**
+401d0f     90                    nop        /**
+401d12     55                    push %rbp 
+401d1e     48 8b 45 e8           mov -0x18(%rbp),%rax       /**
+401d26     48 8d 45 f8           lea -0x8(%rbp),%rax       /**
+401d39     c9                    leaveq        /**
+401d3b     55                    push %rbp 	// Instantiating std::__relocate_a might cause an error outside the
+401d43     e8 02 00 00 00        callq 401d4a <_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE19_S_nothrow_relocateESt17integral_constantIbLb1EE>
+401d48     c9                    leaveq        static pointer
+401d4a     55                    push %rbp 	return noexcept(std::__relocate_a(std::declval<pointer>(),
+401d4e     b8 01 00 00 00        mov $0x1,%eax 
+401d53     5d                    pop %rbp       static constexpr bool
+401d55     90                    nop        static constexpr bool
+401d56     55                    push %rbp #else
+401d6b     48 8b 45 a8           mov -0x58(%rbp),%rax       pointer __old_start = this->_M_impl._M_start;
+401d85     48 8b 45 a8           mov -0x58(%rbp),%rax       const size_type __elems_before = __position - begin();
+401d90     48 8b 45 a8           mov -0x58(%rbp),%rax       pointer __new_start(this->_M_allocate(__len));
+401d9c     48 8b 45 a8           mov -0x58(%rbp),%rax       pointer __new_finish(__new_start);
+401dbf     48 89 45 c8           mov %rax,-0x38(%rbp)       pointer __new_finish(__new_start);
+401dc3     48 8b 45 a8           mov -0x58(%rbp),%rax       __try
+401dda     48 8b 45 c0           mov -0x40(%rbp),%rax 	{
+401de2     48 8b 45 98           mov -0x68(%rbp),%rax #if __cplusplus >= 201103L
+401df1     48 8b 45 c8           mov -0x38(%rbp),%rax 				   std::forward<_Args>(__args)...);
+401dfc     48 8b 45 c0           mov -0x40(%rbp),%rax #if __cplusplus >= 201103L
+401e03     48 8b 45 a8           mov -0x58(%rbp),%rax #if __cplusplus >= 201103L
+401e07     48 89 ce              mov %rcx,%rsi #if __cplusplus >= 201103L
+401e12     48 c7 45 e8 00 00 00  movq $0x0,-0x18(%rbp) #if __cplusplus >= 201103L
+401e1a     e8 1c ff ff ff        callq 401d3b <_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE15_S_use_relocateEv>	      __new_finish = _S_relocate(__old_start, __position.base(),
+401e1f     84 c0                 test %al,%al 	      __new_finish = _S_relocate(__old_start, __position.base(),
+401e23     48 8b 45 a8           mov -0x58(%rbp),%rax 	      ++__new_finish;
+401e32     48 8d 45 a0           lea -0x60(%rbp),%rax 
+401e58     48 83 45 e8 20        addq $0x20,-0x18(%rbp) 	      __new_finish = _S_relocate(__position.base(), __old_finish,
+401e5d     48 8b 45 a8           mov -0x58(%rbp),%rax 	  else
+401e6c     48 8d 45 a0           lea -0x60(%rbp),%rax 	    }
+401e94     48 8b 45 a8           mov -0x58(%rbp),%rax 	      ++__new_finish;
+401ea3     48 8d 45 a0           lea -0x60(%rbp),%rax 
+401ec9     48 83 45 e8 20        addq $0x20,-0x18(%rbp) 	      __new_finish
+401ece     48 8b 45 a8           mov -0x58(%rbp),%rax 	}
+401edd     48 8d 45 a0           lea -0x60(%rbp),%rax 	    }
+401eff     48 89 45 e8           mov %rax,-0x18(%rbp) 	    }
+401f03     e8 33 fe ff ff        callq 401d3b <_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE15_S_use_relocateEv>	std::_Destroy(__old_start, __old_finish, _M_get_Tp_allocator());
+401f08     83 f0 01              xor $0x1,%eax 	std::_Destroy(__old_start, __old_finish, _M_get_Tp_allocator());
+401f0b     84 c0                 test %al,%al 	std::_Destroy(__old_start, __old_finish, _M_get_Tp_allocator());
+401f0f     48 8b 45 a8           mov -0x58(%rbp),%rax       _M_deallocate(__old_start,
+401f1e     48 8b 4d d0           mov -0x30(%rbp),%rcx       _M_deallocate(__old_start,
+401f31     48 8b 45 a8           mov -0x58(%rbp),%rax       this->_M_impl._M_start = __new_start;
+401f35     48 8b 55 a8           mov -0x58(%rbp),%rdx       this->_M_impl._M_finish = __new_finish;
+401f3d     48 2b 55 d8           sub -0x28(%rbp),%rdx       this->_M_impl._M_finish = __new_finish;
+401f45     48 8b 4d d8           mov -0x28(%rbp),%rcx       this->_M_impl._M_start = __new_start;
+401f54     48 8b 45 a8           mov -0x58(%rbp),%rax       this->_M_impl._M_end_of_storage = __new_start + __len;
+401f5f     48 8b 45 a8           mov -0x58(%rbp),%rax     }
+401f6b     48 8b 45 e0           mov -0x20(%rbp),%rax 
+401f7d     48 8b 45 a8           mov -0x58(%rbp),%rax 
+401f85     e9 83 00 00 00        jmpq 40200d   template<typename _Tp, typename _Alloc>
+401f8a     48 89 c7              mov %rax,%rdi 	  if (!__new_finish)
+401f92     48 83 7d e8 00        cmpq $0x0,-0x18(%rbp) 				   __new_start + __elems_before);
+401f99     48 8b 45 c8           mov -0x38(%rbp),%rax 	    std::_Destroy(__new_start, __new_finish, _M_get_Tp_allocator());
+401fa4     48 8b 45 c0           mov -0x40(%rbp),%rax 	  else
+401fab     48 8b 45 a8           mov -0x58(%rbp),%rax 	  else
+401faf     48 89 d6              mov %rdx,%rsi 	  else
+401fbc     48 8b 45 a8           mov -0x58(%rbp),%rax 	  __throw_exception_again;
+401fcb     48 8b 4d e8           mov -0x18(%rbp),%rcx 	  __throw_exception_again;
+401fde     48 8b 45 a8           mov -0x58(%rbp),%rax 	}
+401ff5     e8 56 f1 ff ff        callq 401150 <__cxa_rethrow@plt>#if __cplusplus >= 201103L
+401ffd     e8 7e f1 ff ff        callq 401180 <__cxa_end_catch@plt>	  if (!__new_finish)
+40200d     48 83 c4 68           add $0x68,%rsp   template<typename _Tp, typename _Alloc>
+402014     55                    push %rbp       template<typename _Tp1>
+402020     90                    nop        template<typename _Tp1>
+402023     90                    nop        template<typename _Tp1>
+402024     55                    push %rbp #if __cpp_aligned_new
+402038     48 8b 45 f0           mov -0x10(%rbp),%rax 
+402044     90                    nop        size_type
+402047     55                    push %rbp 	  for (; __first != __last; ++__first)
+402057     48 8b 45 f8           mov -0x8(%rbp),%rax 	}
+402061     48 8b 45 f8           mov -0x8(%rbp),%rax     };
+402075     48 83 45 f8 20        addq $0x20,-0x8(%rbp) 	}
+40207c     90                    nop  
+40207f     90                    nop  
+402080     55                    push %rbp 			    _Up(std::forward<_Args>(__args)...)))
+402095     48 8b 45 d8           mov -0x28(%rbp),%rax       template<typename _Up>
+4020a4     48 8b 45 e0           mov -0x20(%rbp),%rax       template<typename _Up>
+4020a8     48 89 c6              mov %rax,%rsi       template<typename _Up>
+4020c0     90                    nop        template<typename _Up>
+4020c8     55                    push %rbp 
+4020d4     48 8b 45 f0           mov -0x10(%rbp),%rax       // Allow iterator to const_iterator conversion
+4020e2     90                    nop        // Allow iterator to const_iterator conversion
+4020e5     90                    nop        // Allow iterator to const_iterator conversion
+4020e6     55                    push %rbp 	if (max_size() - size() < __n)
+4020fb     48 8b 45 d8           mov -0x28(%rbp),%rax 
+40211c     48 8b 45 d0           mov -0x30(%rbp),%rax 
+402126     84 c0                 test %al,%al 
+40212a     48 8b 45 c8           mov -0x38(%rbp),%rax 	const size_type __len = size() + (std::max)(size(), __n);
+402136     48 8b 45 d8           mov -0x28(%rbp),%rax       }
+402145     48 8b 45 d8           mov -0x28(%rbp),%rax       }
+402168     48 8b 00              mov (%rax),%rax       }
+40216b     48 01 d8              add %rbx,%rax       }
+402172     48 8b 45 d8           mov -0x28(%rbp),%rax 
+40217e     48 39 45 e8           cmp %rax,-0x18(%rbp) 
+402184     48 8b 45 d8           mov -0x28(%rbp),%rax 
+402190     48 39 45 e8           cmp %rax,-0x18(%rbp) 
+402196     48 8b 45 d8           mov -0x28(%rbp),%rax 
+4021a4     48 8b 45 e8           mov -0x18(%rbp),%rax 
+4021a8     48 83 c4 38           add $0x38,%rsp       // Called by constructors to check initial size.
+4021af     90                    nop        // Called by constructors to check initial size.
+4021b0     55                    push %rbp 
+4021bc     48 8b 55 e8           mov -0x18(%rbp),%rdx       /**
+4021c0     48 8d 45 f8           lea -0x8(%rbp),%rax       /**
+4021d3     c9                    leaveq        /**
+4021d5     55                    push %rbp     _GLIBCXX_NOEXCEPT
+4021e6     48 8b 45 e8           mov -0x18(%rbp),%rax   template<typename _Iterator, typename _Container>
+40220a     48 c1 f8 05           sar $0x5,%rax   template<typename _Iterator, typename _Container>
+40220e     48 83 c4 18           add $0x18,%rsp   template<typename _Iterator, typename _Container>
+402215     90                    nop    template<typename _Iterator, typename _Container>
+402216     55                    push %rbp 	typedef __gnu_cxx::__alloc_traits<_Tp_alloc_type> _Tr;
+402226     48 83 7d f0 00        cmpq $0x0,-0x10(%rbp) 
+40222d     48 8b 45 f8           mov -0x8(%rbp),%rax 
+402231     48 8b 55 f0           mov -0x10(%rbp),%rdx 
+402240     eb 05                 jmp 402247 <_ZNSt12_Vector_baseINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_M_allocateEm+0x31>
+402242     b8 00 00 00 00        mov $0x0,%eax 
+402247     c9                    leaveq        void
+402249     55                    push %rbp       {
+402261     48 8b 4d d0           mov -0x30(%rbp),%rcx #endif // C++11
+402279     c9                    leaveq  
+40227b     90                    nop  
+40227c     55                    push %rbp     };
+402284     48 8b 45 f8           mov -0x8(%rbp),%rax 
+402288     5d                    pop %rbp 
+40228a     55                    push %rbp 				       _ForwardIterator __result,
+4022a3     48 8b 45 e0           mov -0x20(%rbp),%rax     }
+4022d7     48 83 c4 28           add $0x28,%rsp   template<typename _ForwardIterator, typename _Tp, typename _Allocator>
+4022de     55                    push %rbp 	{ __a.destroy(__p); }
+4022ee     48 8b 55 f0           mov -0x10(%rbp),%rdx       /**
+402301     90                    nop        /**
+402304     55                    push %rbp 
+40230c     48 8b 45 f8           mov -0x8(%rbp),%rax #if __cplusplus >= 201103L
+402310     5d                    pop %rbp #if __cplusplus >= 201103L
+402312     55                    push %rbp 
+40231e     48 8b 45 f8           mov -0x8(%rbp),%rax   template<bool>
+40232a     90                    nop    template<bool>
+40232d     90                    nop    template<bool>
+40232e     55                    push %rbp 
+40233a     48 8b 45 f8           mov -0x8(%rbp),%rax #if __cplusplus >= 201103L
+402346     48 89 c7              mov %rax,%rdi #if __cplusplus >= 201103L
+40234e     c9                    leaveq  #if __cplusplus >= 201103L
+402350     55                    push %rbp       // concept requirements
+40235c     48 8b 45 f8           mov -0x8(%rbp),%rax       return __a;
+40236a     48 39 c2              cmp %rax,%rdx       return __a;
+40236f     48 8b 45 f0           mov -0x10(%rbp),%rax     }
+402375     48 8b 45 f8           mov -0x8(%rbp),%rax 
+402379     5d                    pop %rbp   /**
+40237b     55                    push %rbp 
+40238b     48 8b 4d f0           mov -0x10(%rbp),%rcx       /**
+4023a3     c9                    leaveq        /**
+4023a5     55                    push %rbp       {
+4023bd     48 8b 4d e0           mov -0x20(%rbp),%rcx 
+4023d5     c9                    leaveq        static pointer
+4023d7     55                    push %rbp 
+4023e3     48 8b 55 e8           mov -0x18(%rbp),%rdx   // @} group iterators
+4023fa     c9                    leaveq    // @} group iterators
+4023fc     55                    push %rbp     { return std::uninitialized_copy(__first, __last, __result); }
+402414     48 8b 55 e8           mov -0x18(%rbp),%rdx   template<typename _InputIterator, typename _ForwardIterator,
+40242b     c9                    leaveq    template<typename _InputIterator, typename _ForwardIterator,
+40242d     90                    nop    template<typename _InputIterator, typename _ForwardIterator,
+40242e     55                    push %rbp 	{ __p->~_Up(); }
+40243e     48 8b 45 f0           mov -0x10(%rbp),%rax       // _GLIBCXX_RESOLVE_LIB_DEFECTS
+40244a     90                    nop        // _GLIBCXX_RESOLVE_LIB_DEFECTS
+40244d     55                    push %rbp 	// std::distance(begin(), end()) cannot be greater than PTRDIFF_MAX,
+402459     48 b8 ff ff ff ff ff  movabs $0x3ffffffffffffff,%rax 	const size_t __allocmax = _Alloc_traits::max_size(__a);
+402467     48 8b 45 e8           mov -0x18(%rbp),%rax       }
+402473     48 89 45 f0           mov %rax,-0x10(%rbp)       }
+402477     48 8d 55 f0           lea -0x10(%rbp),%rdx 
+40248d     c9                    leaveq        // Internal erase functions follow.
+40248f     90                    nop        // Internal erase functions follow.
+402490     55                    push %rbp 
+402498     48 8b 45 f8           mov -0x8(%rbp),%rax       allocator_type
+40249c     5d                    pop %rbp       allocator_type
+40249e     55                    push %rbp 	if (__n > this->max_size())
+4024b2     48 8b 45 f8           mov -0x8(%rbp),%rax 
+4024c5     84 c0                 test %al,%al 
+4024c9     e8 72 eb ff ff        callq 401040 <_ZSt17__throw_bad_allocv@plt>#if __cpp_aligned_new
+4024ce     48 8b 45 f0           mov -0x10(%rbp),%rax 
+4024de     c9                    leaveq        // __p is not permitted to be a null pointer.
+4024e0     55                    push %rbp     noexcept(noexcept(__relocate_a_1(std::__niter_base(__first),
+4024fb     48 8b 45 d8           mov -0x28(%rbp),%rax 			    std::__niter_base(__result), __alloc);
+40253a     48 83 c4 20           add $0x20,%rsp 
+402543     90                    nop  
+402544     55                    push %rbp 
+402550     48 8b 45 f8           mov -0x8(%rbp),%rax       template<typename _Iter>
+40255b     90                    nop        template<typename _Iter>
+40255e     55                    push %rbp     {
+402572     c6 45 ff 01           movb $0x1,-0x1(%rbp) 
+402576     48 8b 55 d8           mov -0x28(%rbp),%rdx 
+40258d     c9                    leaveq  
+40258f     55                    push %rbp 
+40259b     48 8b 45 f8           mov -0x8(%rbp),%rax       /**
+4025a7     c9                    leaveq        /**
+4025a9     55                    push %rbp       // concept requirements
+4025b5     48 8b 45 f0           mov -0x10(%rbp),%rax       return __a;
+4025c3     48 39 c2              cmp %rax,%rdx       return __a;
+4025c8     48 8b 45 f0           mov -0x10(%rbp),%rax     }
+4025ce     48 8b 45 f8           mov -0x8(%rbp),%rax 
+4025d2     5d                    pop %rbp   /**
+4025d4     55                    push %rbp #if __PTRDIFF_MAX__ < __SIZE_MAX__
+4025dc     48 b8 ff ff ff ff ff  movabs $0x3ffffffffffffff,%rax 	return size_t(-1) / sizeof(_Tp);
+4025e6     5d                    pop %rbp #if __cplusplus >= 201103L
+4025e8     55                    push %rbp     { return __it; }
+4025f0     48 8b 45 f8           mov -0x8(%rbp),%rax   // Reverse the __niter_base transformation to get a
+4025f4     5d                    pop %rbp   // Reverse the __niter_base transformation to get a
+4025f6     55                    push %rbp     noexcept(noexcept(std::__relocate_object_a(std::addressof(*__result),
+40260f     48 8b 45 c8           mov -0x38(%rbp),%rax 	std::__relocate_object_a(std::__addressof(*__cur),
+402617     48 8b 45 d8           mov -0x28(%rbp),%rax 				 std::__addressof(*__first), __alloc);
+402621     48 8b 45 d8           mov -0x28(%rbp),%rax       return __cur;
+402651     48 83 45 d8 20        addq $0x20,-0x28(%rbp) 				 std::__addressof(*__first), __alloc);
+40265d     48 8b 45 e8           mov -0x18(%rbp),%rax 
+402661     48 83 c4 38           add $0x38,%rsp   template <typename _InputIterator, typename _ForwardIterator,
+402668     55                    push %rbp         {
+40267d     48 8b 45 c8           mov -0x38(%rbp),%rax 	    {
+402685     48 8d 55 d0           lea -0x30(%rbp),%rdx 	      return __cur;
+40269c     48 8d 45 d8           lea -0x28(%rbp),%rax 	    }
+4026ab     48 8b 45 e8           mov -0x18(%rbp),%rax 	    }
+4026c2     48 8d 45 d8           lea -0x28(%rbp),%rax 	      return __cur;
+4026ce     48 83 45 e8 20        addq $0x20,-0x18(%rbp) 	      return __cur;
+4026d5     48 8b 45 e8           mov -0x18(%rbp),%rax 	  __catch(...)
+4026db     48 89 c7              mov %rax,%rdi 	      std::_Destroy(__result, __cur);
+4026e3     48 8b 55 e8           mov -0x18(%rbp),%rdx 	    }
+4026f6     e8 55 ea ff ff        callq 401150 <__cxa_rethrow@plt>	}
+4026fe     e8 7d ea ff ff        callq 401180 <__cxa_end_catch@plt>	      std::_Destroy(__result, __cur);
+40270e     48 83 c4 38           add $0x38,%rsp 
+402715     55                    push %rbp 			 __dest, std::move(*__orig)))
+402729     48 8b 45 f0           mov -0x10(%rbp),%rax     }
+402738     48 8b 4d f8           mov -0x8(%rbp),%rcx     }
+40274b     48 8b 45 f0           mov -0x10(%rbp),%rax 
+402769     90                    nop    // This class may be specialized for specific types.
+40276c     55                    push %rbp     { return !(__x == __y); }
+40277c     48 8b 55 f0           mov -0x10(%rbp),%rdx   template<typename _IteratorL, typename _IteratorR>
+40278f     83 f0 01              xor $0x1,%eax   template<typename _IteratorL, typename _IteratorR>
+402792     c9                    leaveq    template<typename _IteratorL, typename _IteratorR>
+402794     55                    push %rbp 	++_M_current;
+40279c     48 8b 45 f8           mov -0x8(%rbp),%rax       }
+4027a3     48 8d 50 20           lea (%rax),%rdx       }
+4027ae     48 8b 45 f8           mov -0x8(%rbp),%rax 
+4027b2     5d                    pop %rbp       _GLIBCXX17_CONSTEXPR move_iterator
+4027b4     55                    push %rbp 
+4027bc     48 8b 45 f8           mov -0x8(%rbp),%rax       _GLIBCXX17_CONSTEXPR pointer
+4027c3     5d                    pop %rbp       _GLIBCXX17_CONSTEXPR pointer
+4027c5     55                    push %rbp #else
+4027d6     48 8b 45 e0           mov -0x20(%rbp),%rax   template<typename _T1, typename _T2>
+4027e5     48 8b 45 e8           mov -0x18(%rbp),%rax   template<typename _T1, typename _T2>
+4027e9     48 89 c6              mov %rax,%rsi   template<typename _T1, typename _T2>
+402801     90                    nop    template<typename _T1, typename _T2>
+402809     55                    push %rbp     { return __x.base() == __y.base(); }
+40281a     48 8b 45 e8           mov -0x18(%rbp),%rax   template<typename _IteratorL, typename _IteratorR>
+402835     48 39 c3              cmp %rax,%rbx   template<typename _IteratorL, typename _IteratorR>
+40283b     48 83 c4 18           add $0x18,%rsp   template<typename _IteratorL, typename _IteratorR>
+402842     55                    push %rbp 
+40284a     48 8b 45 f8           mov -0x8(%rbp),%rax       _GLIBCXX17_CONSTEXPR reference
+402851     5d                    pop %rbp       _GLIBCXX17_CONSTEXPR reference
+402853     66 2e 0f 1f 84 00 00  nopw %cs:0x0(%rax,%rax,1)       _GLIBCXX17_CONSTEXPR reference
