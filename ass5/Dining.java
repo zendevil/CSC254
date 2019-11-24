@@ -1,4 +1,4 @@
-// Edited By Prikshet Sharma, 2019.
+// Edited By Prikshet Sharma, 2019.A
 //
 // Simple Java implementation of the classic Dining Philosophers problem.
 //
@@ -62,37 +62,25 @@ public class Dining {
     }
 }
 
-class Fork {
-    private Table t;
-    private static final int XSIZE = 10;
-    private static final int YSIZE = 10;
-    private final int orig_x;
-    private final int orig_y;
-    private int x;
-    private int y;
+class Fork extends Item {
 
-    // Constructor.
-    // cx and cy indicate coordinates of center.
-    // Note that fillOval method expects coordinates of upper left corner
-    // of bounding box instead.
-    //
+    private boolean isDirty;
     public Fork(Table T, int cx, int cy) {
-        t = T;
-	
-        orig_x = cx;
-        orig_y = cy;
-	System.err.println("Placing " + this.getName() + " at " + orig_x + " " + orig_y);
-	x = cx;
-        y = cy;
+	super(T, cx, cy);
+	System.err.println("Placing " + this.getName() + " at " + cx + " " + cy);
 	isDirty = true;
     }
-    private boolean isDirty;
+    
 
-    public void setDirty(boolean b) {
-	isDirty = b;
+    public void setClean() {
+	isDirty = false;
     }
 
-    public boolean getWhetherDirty() {
+    public void setDirty() {
+	isDirty = true;
+    }
+
+    public boolean isDirty() {
 	return isDirty;
     }
 
@@ -110,8 +98,81 @@ class Fork {
     public String getName() {
 	return "Fork " + (this + "").substring(5, 8);
     }
+
+    public void release() {
+        reset();
+    }
+
     public void reset() {
-	System.err.println("Reset " + this.getName() + " to " + orig_x + " " + orig_y);
+	System.err.print(this.getName());
+	super.reset();	
+    }
+    public void draw(Graphics g) {
+	g.setColor(Color.gray);
+	super.draw(this.getName(), g);
+    }
+}
+class Item {
+    private Table t;
+    private static final int XSIZE = 10;
+    private static final int YSIZE = 10;
+    private final int orig_x;
+    private final int orig_y;
+    private int x;
+    private int y;
+
+    // Constructor.
+    // cx and cy indicate coordinates of center.
+    // Note that fillOval method expects coordinates of upper left corner
+    // of bounding box instead.
+    public Item(Table T, int cx, int cy) {
+	t = T;
+	orig_x = cx;
+	orig_y = cy;
+	x = cx;
+        y = cy;
+    }
+
+    enum Status {
+	SENT, RECEIVED;
+    }
+
+    Status status;
+    Status tokenStatus;
+    
+    public void send() {
+	status = Status.SENT;
+    }
+
+    public boolean isSent() {
+	return status == Status.SENT;
+    }
+
+    public boolean isRequestSent() {
+	return tokenStatus == Status.SENT;
+    }
+
+    public void sendRequest() {
+	tokenStatus = Status.SENT;
+    }
+
+    public void receive() {
+	status = Status.RECEIVED;
+    }
+
+    public void receiveRequest() {
+	tokenStatus = Status.RECEIVED;
+    }
+
+    // erase self
+    private void clear() {
+        Graphics g = t.getGraphics();
+	g.setColor(t.getBackground());	
+        g.fillOval(x-XSIZE/2, y-YSIZE/2, XSIZE, YSIZE);
+    }
+
+    public void reset() {
+	System.err.println(" reset to " + x + " " + y);
 	clear();
 	x = orig_x;
 	y = orig_y;
@@ -129,31 +190,45 @@ class Fork {
         y = (orig_y + py)/2;
 	t.repaint();
     }
-
-    public void release() {
-        reset();
-    }
-
-    // render self
-    //
-    public void draw(Graphics g) {
-        g.setColor(Color.black);
-        //g.fillOval(x-XSIZE/2, y-YSIZE/2, XSIZE, YSIZE);
-	g.drawString((this + "").substring(5, 8), x, y);
-    }
     
-    // erase self
-    //
-    private void clear() {
-        Graphics g = t.getGraphics();
-        
-	g.setColor(t.getBackground());
+    // render self
+    public void draw(String name, Graphics g) {
+	g.drawString(name.contains("Bottle") ? name.substring(6) : name.substring(4), x, y);
+        //g.fillOval(x-XSIZE/2, y-YSIZE/2, XSIZE, YSIZE);
 	
-        g.fillOval(x-XSIZE/2, y-YSIZE/2, XSIZE, YSIZE);
     }
+   
 }
 
+class Bottle extends Item {
+    private Fork correspondingFork;
+    
+    public Bottle(Table T, int cx, int cy) {
+	super(T, cx, cy);
+    }
+    
+    public void setCorrespondingFork(Fork fork) {
+	correspondingFork = fork;
+    }
 
+    public Fork getCorrespondingFork() {
+	return correspondingFork;
+    }
+
+    public String getName() {
+	return "Bottle " + (this + "").substring(8, 11);
+    }
+
+    public void reset() {
+	System.err.print(this.getName());
+	super.reset();	
+    }
+
+    public void draw(Graphics g) {
+	g.setColor(Color.pink);
+	super.draw(this.getName(), g);
+    }
+}
 
 
 class Philosopher extends Thread {
@@ -171,183 +246,182 @@ class Philosopher extends Thread {
     private static final int YSIZE = 50;
     private int x;
     private int y;
-    private Fork leftFork;
-    private Fork rightFork;
-    public Philosopher leftPhilosopher;
-    public Philosopher rightPhilosopher;
+
+    public Map<Fork,Boolean> forks = new HashMap<Fork,Boolean>();
+    private Map<Bottle, Boolean> bottles = new HashMap<Bottle, Boolean>();
     
+    private Map<Philosopher, Boolean> neighbors;
     private Random prn;
     private Color color;
 
-    private static final int NUM_PHILS = 5;
-    public Map<Fork,Boolean> hasFork =
-	new HashMap<Fork,Boolean>();
-    public Map<Fork,Boolean> hasRequestToken =
-	new HashMap<Fork,Boolean>();
     
-    
+    private Map<Fork,Boolean> hasForkRequestToken = new HashMap<Fork,Boolean>();
+    private Map<Bottle, Boolean> hasBottleRequestToken = new HashMap<Bottle, Boolean>();
+    private Map<Bottle, Boolean> needsBottle = new HashMap<Bottle, Boolean>();
+    public void printForks() {
+	System.err.println(this.getPhilosopherName() + "'s Forks");
+	for (Fork f : forks.keySet().toArray(new Fork[0])) {
+	    System.err.println(this.getPhilosopherName() + " has " + f.getName() + "? " + forks.get(f));
+	}
+    }
     
     public String getPhilosopherName() {
     	return "Philosopher " + (this + "").substring(14, 15);
     }
-    public enum Status {
+    private enum EatStatus {
 	THINKS, HUNGRY, EATS;
     }
-    Status status;
-    //public boolean reqrec = false;
-    //public boolean forkrec = false;
 
-    public void setLeft(Philosopher lp) {
-	leftPhilosopher = lp;
+    private enum DrinkStatus {
+	TRANQUIL, DRINKS, THIRSTY;
     }
-
-    public void setRight(Philosopher rp) {
-	rightPhilosopher = rp;
-    }
-
-    synchronized void sendRequest(Fork fork) {
-	// TODO try block and check exception type
-
-	// try {
-	//     System.err.println(leftPhilosopher);
-	// } catch (Throwable t) {
-	//     System.err.println(t + " leftFork"
-	// 		       + " P: " + this);
-	// }
-	if (fork == leftFork) {
-	    System.err.println("Philosopher " + (this + "").substring(14, 15) + " Request left phil " + "Philosopher " + (leftPhilosopher + "").substring(14, 15));
-	    //leftPhilosopher.reqrec = true;
-	    leftPhilosopher.hasRequestToken.put(fork, true);
-	}
-	
-	
-	if (fork == rightFork) {
-	    System.err.println(this.getPhilosopherName() + " requests " + rightPhilosopher.getPhilosopherName());
-	    //rightPhilosopher.reqrec = true;
-	    rightPhilosopher.hasRequestToken.put(fork, true);
-	}
-	
-
-	
-    }
-
-    synchronized void sendFork(Fork fork) {
-	assert(fork == leftFork || fork == rightFork);
-	if (fork == leftFork) {
-	    System.out.println(leftPhilosopher.getPhilosopherName() + " to receive " + fork.getName());
-	    fork.setReceived(leftPhilosopher, true);
-	} else {
-	    fork.setReceived(rightPhilosopher, true);
-	}
-    }
-
     
-    // Actions
-    synchronized void requestFork(Fork f) {
-	if (status == Status.HUNGRY && hasRequestToken.get(f) && !hasFork.get(f)) {
-	    assert(f == leftFork || f == rightFork);
+    EatStatus eatStatus;
+    DrinkStatus drinkStatus;
+    public void addFork(Fork f, Boolean b) {
+	forks.put(f, b);
+    }
+
+    public void addBottle(Bottle bottle, Boolean bool) {
+	bottles.put(bottle, bool);
+    }
+
+    // Drinking Actions
+
+    private void requestBottle(Bottle bottle) {
+	if (drinkStatus == DrinkStatus.THIRSTY && needsBottle.get(bottle) && hasBottleRequestToken.get(bottle) && !bottles.get(bottle)) {
+	    bottle.sendRequest();
+	    hasBottleRequestToken.put(bottle, false);
+	} else {
+	    System.err.println(this.getPhilosopherName() + " doesn't request bottle " + bottle.getName());
+	}
+    }
+
+    private void sendBottle(Bottle bottle) {
+	if (hasBottleRequestToken.get(bottle) && bottles.get(bottle) && !(needsBottle.get(bottle) && (drinkStatus == DrinkStatus.DRINKS || forks.get(bottle.getCorrespondingFork())))) {
+	    bottle.send();
+	    bottles.put(bottle, false);
+	} else {
+	    System.err.println(this.getPhilosopherName() + " doesn't send bottle " + bottle.getName());
+	}
+    }
+
+    private boolean isRequestSentToMe(Bottle bottle) {
+	return bottle.isRequestSent() && !hasBottleRequestToken.get(bottle);
+    }
+
+    // if bottle's status is sent and this Philosopher doesn't have the bottle,
+    // then it must have been sent by the other Philosopher. 
+    private boolean isSentToMe(Bottle bottle) {
+	return bottle.isSent() && !bottles.get(bottle);
+    }
+    
+    private void receiveBottleRequest(Bottle bottle) {
+	if (isRequestSentToMe(bottle)) {
+	    hasBottleRequestToken.put(bottle, true);
+	    bottle.receiveRequest();
+	}
+    }
+
+    private void receiveBottle(Bottle bottle) {
+	if (isSentToMe(bottle)) {
+	    bottles.put(bottle, true);
+	    bottle.receive();
+	}
+    }
+	
+    // Dining Actions
+    private void requestFork(Fork f) {
+	if (eatStatus == EatStatus.HUNGRY && hasForkRequestToken.get(f) && !forks.get(f)) {
+	    
 	    System.out.println(this.getPhilosopherName() + " requests " + f.getName());
-	    sendRequest(f);
-	    hasRequestToken.put(f, false);
+	    f.sendRequest();
+	    hasForkRequestToken.put(f, false);
 	} else {
 	    //System.out.println(this.getPhilosopherName() + " doesn't request " + (f == leftFork ? "left fork" : "rightFork"));
 	}
     }
 
-    synchronized void releaseFork(Fork f) {
-	if (status != Status.EATS && hasRequestToken.get(f) && f.getWhetherDirty()) {
+    private void releaseFork(Fork f) {
+	if (eatStatus != EatStatus.EATS && hasForkRequestToken.get(f) && f.isDirty()) {
 	    System.err.println(this.getPhilosopherName() + " sends fork " + f.getName());
-	    sendFork(f);
-	    f.setDirty(false);
-	    hasFork.put(f, false);
-	    f.setReceived(this, false);
+	    f.send();
+	    f.setClean();
+	    forks.put(f, false);
+	    //f.setReceived(this, false);
 	    f.reset();
 	} else {
-	    System.err.println(this.getPhilosopherName() + " status " + status);
-	    System.err.println(this.getPhilosopherName() + " has request token for " + f.getName() + " " + hasRequestToken.get(f));
-	    System.err.println(f.getName() + " dirty? " + f.getWhetherDirty());
+	    System.err.println(this.getPhilosopherName() + " eating status " + eatStatus);
+	    System.err.println(this.getPhilosopherName() + " has request token for " + f.getName() + " " + hasForkRequestToken.get(f));
+	    System.err.println(f.getName() + " dirty? " + f.isDirty());
 	    System.err.println(this.getPhilosopherName() + " doesn't send fork " + f.getName());
 	}
     }
 
-    void receiveRequest(Fork f) {
-        
-	hasRequestToken.put(f, true);
-    	
+    private void receiveForkRequest(Fork f) {
+	if (isRequestSentToMe(f)) {
+	    f.receiveRequest();
+	    hasForkRequestToken.put(f, true);
+	}
+    }
+
+    private boolean isRequestSentToMe(Fork f) {
+	return f.isRequestSent() && !hasForkRequestToken.get(f);
+    }
+    // if fork's status is sent and this philosopher doesn't have
+    // the fork then it must have been sent by the other philosopher
+    private boolean isSentToMe(Fork f) {
+	return f.isSent() && !forks.get(f);
+    }
+    private void receiveFork(Fork f) {
+	if (isSentToMe(f)) {
+	    f.receive();
+	    forks.put(f, true);
+	}
     }
     
     
-    synchronized void haveFork(Fork f) {
+    
+    private void haveFork(Fork f) {
         
-	hasFork.put(f, true);
+	forks.put(f, true);
 	f.acquire(x, y);
 	System.err.println("acquires fork");
 	//System.out.println(f.getName() + " dirty? " + f.getWhetherDirty());
-	f.setDirty(false);
+	f.setClean();
 	
 	
     }
-    
+
+    public void addNeighbor(Philosopher p, Boolean b) {
+	neighbors.put(p, b);
+    }
     // Constructor.
     // cx and cy indicate coordinates of center
     // Note that fillOval method expects coordinates of upper left corner
     // of bounding box instead.
     //
     public Philosopher(Table T, int cx, int cy,
-                       Fork lf, Fork rf, Coordinator C, int numForks) {
+                       Coordinator C) {
 	t = T;
         x = cx;
         y = cy;
-        leftFork = lf;
-        rightFork = rf;
+        forks = new HashMap<Fork, Boolean>();
+	bottles = new HashMap<Bottle, Boolean>();
         c = C;
         prn = new Random();
         color = THINK_COLOR;
 
-	status = Status.THINKS;
-	if (numForks == 2) {
-	    lf.setReceived(this, true);
-	    rf.setReceived(this, true);
-	    hasRequestToken.put(lf, false);
-	    hasRequestToken.put(rf, false);
-
-	    System.err.println(this.getPhilosopherName() + " with lf:" +  lf.getName() + ", rf:" +  rf.getName());
-	} else if (numForks == 0) {
-
-	    lf.setReceived(this, false);
-	    rf.setReceived(this, false);
-	    hasRequestToken.put(lf, true);
-	    hasRequestToken.put(rf, true);
-
-	    System.err.println(this.getPhilosopherName() + " none");
-	} else if (numForks == 1) {
-
-	    lf.setReceived(this, true); // left by default
-	    rf.setReceived(this, false);
-            hasRequestToken.put(rf, true); // default right req token
-	    hasRequestToken.put(lf, false);
-
-	    System.err.println(this.getPhilosopherName() + " with " + lf.getName());
-	}
+	neighbors = new HashMap<Philosopher, Boolean>();
+	
+	eatStatus = EatStatus.THINKS;
+	
     }
 
     // start method of Thread calls run; you don't
     //
 
     public void run() {
-
-	if (leftFork.getWhetherReceived(this)) {
-	    haveFork(leftFork);
-	} else {
-	    hasFork.put(leftFork, false);
-	}
-	if (rightFork.getWhetherReceived(this)) {
-	    haveFork(rightFork);
-	} else {
-	    hasFork.put(rightFork, false);
-	}
-	
-	
 	for (;;) {
             try {
                 if (c.gate()) {
@@ -381,6 +455,14 @@ class Philosopher extends Thread {
 	
     // }
 
+    public void addForkRequestToken(Fork f, boolean bool) {
+	hasForkRequestToken.put(f, bool);
+    }
+
+    public void addBottleRequestToken(Bottle bottle, boolean bool) {
+	hasBottleRequestToken.put(bottle, bool);
+    }
+    
     public void draw(Graphics g, int i) {
         g.setColor(color);
         //g.fillOval(x-XSIZE/2, y-YSIZE/2, XSIZE, YSIZE);
@@ -414,87 +496,79 @@ class Philosopher extends Thread {
     }
     
     private void think() throws ResetException {
-        color = THINK_COLOR;
-        t.repaint();
+	eatStatus = EatStatus.THINKS;
 	System.out.println(this.getPhilosopherName() + " thinks");
-        
+	color = THINK_COLOR;
+	t.repaint();
         delay(THINK_TIME);
-
     }
-
+    
+    private void requestForks() {
+	for (Fork f : forks.keySet().toArray(new Fork[0])) {
+	    requestFork(f);
+	    yield();
+	}
+	System.err.println(this.getPhilosopherName() + " has requested all forks");
+    }
+    private boolean allForksReceived() {
+	for (boolean isReceived : forks.values()) {
+	    if (!isReceived) {
+		return false;
+	    }
+	}
+	System.err.println(this.getPhilosopherName() + " has received all forks");
+	return true;
+    }
     private void hunger() throws ResetException {
-        color = WAIT_COLOR;
+	eatStatus = EatStatus.HUNGRY;
+	color = WAIT_COLOR;
         t.repaint();
-	status = Status.HUNGRY;
 	System.out.println(this.getPhilosopherName() + " hungry");
         delay(FUMBLE_TIME);
-	requestFork(leftFork);
-        //System.err.println(this.getPhilosopherName() + " yields");
-        yield();    // you aren't allowed to remove this
-	System.err.println(this.getPhilosopherName() + " alive and will request " + rightFork.getName());
-	requestFork(rightFork);
-	//rightFork.acquire(x, y);
-	
-	System.err.println(this.getPhilosopherName() + " waiting for both forks to eat.");
-	
-	while(!(hasFork.get(leftFork) && hasFork.get(rightFork))) {
-	    
-	    if (leftFork.getWhetherReceived(this)) {
-		if (!hasFork.get(leftFork)) {
-		    System.err.println(this.getPhilosopherName() + " receives " + leftFork.getName());
-		}
-		
-		haveFork(leftFork);
-	    }
-		
-	    if (rightFork.getWhetherReceived(this)) {
-		if (!hasFork.get(rightFork)) {
-		    System.err.println(this.getPhilosopherName() + " receives " + rightFork.getName());
-		}
-		haveFork(rightFork);
-	    }
+	requestForks();
+	while (!allForksReceived()) {} // be hungry until all forks received          
+    }
+
+    private void dirtyMyForks() {
+	for (Fork fork : forks.keySet().toArray(new Fork[0])) {
+	    fork.setDirty();
 	}
     }
 
-    private void setDirtyForks() {
-	if (hasFork.get(leftFork)) leftFork.setDirty(true);
-	if (hasFork.get(rightFork)) rightFork.setDirty(true);
+    private void releaseMyForks() {
+        for (Fork fork : forks.keySet().toArray(new Fork[0])) {
+	    releaseFork(fork);
+	    yield();
+	}
+	
+	System.err.println(this.getPhilosopherName() + " has released all forks");
     }
 
     private void eat() throws ResetException {
 	//System.out.println(this.getPhilosopherName() + " lf: " + hasFork.get(leftFork) + " rf: " + hasFork.get(rightFork));
-        color = EAT_COLOR;
-        t.repaint();
-	status = Status.EATS;
+	eatStatus = EatStatus.EATS;
 	System.out.println(this.getPhilosopherName() + " eats");
-	setDirtyForks();
+	color = EAT_COLOR;
+	t.repaint();
+	dirtyMyForks();
         delay(EAT_TIME);
-	status = Status.THINKS;
-	while (hasFork.get(leftFork) || hasFork.get(rightFork)) {
-	    receiveRequest(leftFork);
-	    receiveRequest(rightFork);
-	    releaseFork(leftFork);
-	    //System.err.println(this.getPhilosopherName() + " yields");
-	    yield();    // you aren't allowed to remove this
-	    
-	    System.err.println(this.getPhilosopherName() + " alive and will release " + rightFork.getName());
-	    releaseFork(rightFork); 
-	}
-	System.err.println(this.getPhilosopherName() + " has released both forks");
-	
-		
+	releaseMyForks();
     }
 }
 
 // Graphics panel in which philosophers and forks appear.
 //
 class Table extends JPanel {
-    private static final int NUM_PHILS = 5;
-
+    private static int NUM_PHILS = 5;
+    private static int numForks = 5;
+    private static int numBottles = 5;
     // following fields are set by construcctor:
     private final Coordinator c;
     private Fork[] forks;
     private Philosopher[] philosophers;
+    private Bottle[] bottles;
+    private  Map<Philosopher, Map<Philosopher, Boolean>> neighbors =
+	new HashMap<Philosopher, Map<Philosopher, Boolean>>();
 
     public void pause() {
         c.pause();
@@ -512,8 +586,12 @@ class Table extends JPanel {
         for (int i = 0; i < NUM_PHILS; i++) {
             philosophers[i].interrupt();
         }
-        for (int i = 0; i < NUM_PHILS; i++) {
+        for (int i = 0; i < numForks; i++) {
             forks[i].reset();
+        }
+
+	for (int i = 0; i < numBottles; i++) {
+            bottles[i].reset();
         }
     }
 
@@ -524,65 +602,96 @@ class Table extends JPanel {
     // operations in the surrounding window system.
     //
     public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        for (int i = 0; i < NUM_PHILS; i++) {
-            forks[i].draw(g);
-            philosophers[i].draw(g, i);
-        }
-        g.setColor(Color.black);
-        g.drawRect(0, 0, getWidth()-1, getHeight()-1);
-    }
-
-    void setLeftRightPhil(Philosopher[] philosophers) {
-	for (int i = 0; i < NUM_PHILS; i++) {
-	    philosophers[i].setLeft(i == 0 ? philosophers[NUM_PHILS - 1] : philosophers[(i - 1) % NUM_PHILS]);
-	    System.err.println(philosophers[i].getPhilosopherName() + "'s left set to " + (i == 0 ? philosophers[NUM_PHILS - 1].getPhilosopherName() : philosophers[(i - 1) % NUM_PHILS].getPhilosopherName()));
-	    philosophers[i].setRight(philosophers[(i + 1) % NUM_PHILS]);
-	    //System.err.println("Philosopher " + (philosophers[i] + "").substring(14, 15) + "'s right set to " + (i == NUM_PHILS - 1 ? "Philosopher " + (philosophers[i] + "").substring(14, 15)philosophers[0] : "Philosopher " + (philosophers[i] + "").substring(14, 15)philosophers[(i + 1) % NUM_PHILS]));
-	    System.err.println(philosophers[i].getPhilosopherName() + "'s right set to " + philosophers[(i + 1) % NUM_PHILS].getPhilosopherName());
+	if (forks != null && philosophers != null) {
+	    
+	    super.paintComponent(g);
+        
+	    for (int i = 0; i < numForks; i++) {
+		forks[i].draw(g);
+		bottles[i].draw(g);
+	    }
+	    for (int i = 0; i < NUM_PHILS; i++) {
+		philosophers[i].draw(g, i);
+	    }
+	    
 	}
+	g.setColor(Color.black);
+	g.drawRect(0, 0, getWidth()-1, getHeight()-1);
     }
 
+
+    private boolean ifStarred(String string) {
+	return string.length() == 2 && string.charAt(1) == '*';
+    }
     // Constructor
     //
     // Note that angles are measured in radians, not degrees.
     // The origin is the upper left corner of the frame.
     //
     public Table(Coordinator C, int CANVAS_SIZE) {    // constructor
-        c = C;
-        forks = new Fork[NUM_PHILS];
-        philosophers = new Philosopher[NUM_PHILS];
+
+	
+	
+	c = C;
         setPreferredSize(new Dimension(CANVAS_SIZE, CANVAS_SIZE));
-
-        for (int i = 0; i < NUM_PHILS; i++) {
-            double angle = Math.PI/2 + 2*Math.PI/NUM_PHILS*(i-0.5);
-            forks[i] = new Fork(this,
-				(int) (CANVAS_SIZE/2.0 + CANVAS_SIZE/6.0 * Math.cos(angle)),
-				(int) (CANVAS_SIZE/2.0 - CANVAS_SIZE/6.0 * Math.sin(angle)));
-        }
-        for (int i = 0; i < NUM_PHILS; i++) {
-            double angle = Math.PI/2 + 2*Math.PI/NUM_PHILS*i;
-	    int numForks = 1; // ensure acyclicity
-	    if (i == 0) {
-		numForks = 0;
-	    } else if (i == NUM_PHILS - 1) {
-		numForks = 2;
+	
+	try {
+	    
+	    BufferedReader in = new BufferedReader(new FileReader("graph.txt"));
+	    
+	    Object[] lines = in.lines().toArray();
+	    NUM_PHILS = Integer.parseInt(lines[0].toString().split(" ")[0]);
+	    numForks = Integer.parseInt(lines[1].toString().split(" ")[0]);
+	    numBottles = numForks;
+	    forks = new Fork[numForks];
+	    bottles = new Bottle[numBottles];
+	    philosophers = new Philosopher[NUM_PHILS];
+	    
+	    for (int i = 0; i < numForks; i++) {
+		double angle = Math.PI/2 + 2*Math.PI/NUM_PHILS*(i-0.5);
+		// place forks and bottles according to graph.txt
+		forks[i] = new Fork(this,
+				    (int) (CANVAS_SIZE/2.0 + CANVAS_SIZE/6.0 * Math.cos(angle) + 10),
+				    (int) (CANVAS_SIZE/2.0 - CANVAS_SIZE/6.0 * Math.sin(angle)) + 10);
+		bottles[i] = new Bottle(this,
+					(int) (CANVAS_SIZE/2.0 + CANVAS_SIZE/6.0 * Math.cos(angle)),
+					(int) (CANVAS_SIZE/2.0 - CANVAS_SIZE/6.0 * Math.sin(angle)));
+		 
 	    }
-            philosophers[i] = new Philosopher(this,
-					      (int) (CANVAS_SIZE/2.0 + CANVAS_SIZE/3.0 * Math.cos(angle)),
-					      (int) (CANVAS_SIZE/2.0 - CANVAS_SIZE/3.0 * Math.sin(angle)),
-					      forks[i],
-					      forks[(i+1) % NUM_PHILS],
-					      c, numForks);
-            
-        }
+	    
+	    for (int i = 0; i < NUM_PHILS; i++) {
+		double angle = Math.PI/2 + 2*Math.PI/NUM_PHILS*i;
+	    
+		philosophers[i] = new Philosopher(this,
+						  (int) (CANVAS_SIZE/2.0 + CANVAS_SIZE/3.0 * Math.cos(angle)),
+						  (int) (CANVAS_SIZE/2.0 - CANVAS_SIZE/3.0 * Math.sin(angle)),
+						  c);            
+	    }
 
-	setLeftRightPhil(philosophers);
-        System.err.println("\n\nStart");
-	for (int i = 0; i < NUM_PHILS; i++) {
-	    philosophers[i].start();
+	
+	    int philosopherCount = 0;
+	    for (Object l : Arrays.copyOfRange(lines, 2, lines.length)) {
+		for (String neighborString : l.toString().split(" ")) {
+		    int neighborInt = Integer.parseInt(neighborString.substring(0, 1));
+		    philosophers[philosopherCount].addFork(forks[neighborInt], ifStarred(neighborString) ? false : true);
+		    philosophers[philosopherCount].addForkRequestToken(forks[neighborInt], ifStarred(neighborString) ? true : false);
+		    philosophers[philosopherCount].addBottle(bottles[neighborInt], ifStarred(neighborString) ? false : true);
+		    philosophers[philosopherCount].addBottleRequestToken(bottles[neighborInt], ifStarred(neighborString) ? true : false);
+		}
+		philosopherCount++;
+	    }
+
+	  
+	    System.err.println("\n\nStart");
+	    for (int i = 0; i < NUM_PHILS; i++) {
+		philosophers[i].start();
+	    }
+	} catch (Exception e) {
+	    System.err.println(e);
+	    System.err.println("Couldn't get neighbors");
+	    
 	}
+        
     }
 }
 
