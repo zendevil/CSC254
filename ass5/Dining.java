@@ -231,11 +231,23 @@ class Bottle extends Item {
 }
 
 
+
+class Drinker extends Thread {
+
+}
+
+class Diner extends Thread {
+
+}
+
 class Philosopher extends Thread {
     private static final Color THINK_COLOR = Color.blue;
     private static final Color WAIT_COLOR = Color.red;
     private static final Color EAT_COLOR = Color.green;
+    private static final Color DRINK_COLOR = EAT_COLOR;
+    private static final Color TRANQUIL_COLOR = THINK_COLOR;
     private static final double THINK_TIME = 4.0;
+    private static final double TRANQUIL_TIME = THINK_TIME;
     private static final double FUMBLE_TIME = 2.0;
     // time between becoming hungry and grabbing first fork
     private static final double EAT_TIME = 3.0;
@@ -376,6 +388,7 @@ class Philosopher extends Thread {
     private void receiveFork(Fork f) {
 	if (isSentToMe(f)) {
 	    f.receive();
+	    f.setClean();
 	    forks.put(f, true);
 	}
     }
@@ -425,35 +438,98 @@ class Philosopher extends Thread {
 	for (;;) {
             try {
                 if (c.gate()) {
-		    delay(EAT_TIME/2.0);
-		    //System.out.println("eat delay");
+		    delay(DRINK_TIME/2.0);
 		}
-                think();
+		
+                tranquil();
         
                 if (c.gate()) {
-		    delay(THINK_TIME/2.0);
-		    //System.out.println("think delay");
+		    delay(TRANQUIL_TIME/2.0);
 		}
-                hunger();
-                if (c.gate()) {
+		
+                thirst();
+
+		if (c.gate()) {
 		    delay(FUMBLE_TIME/2.0);
-		    //System.out.println("fumble delay");
 		}
-                eat();
-            } catch(ResetException e) { 
-                color = THINK_COLOR;
+		
+                drink();
+
+	    } catch(ResetException e) { 
+                color = TRANQUIL_COLOR;
                 t.repaint();
             }
         }
     }
+    
+    private void setNoBottlesNeeded() {
+	for (Bottle bottle : bottles.keySet().toArray(new Bottle[0])) {
+	    needsBottle.put(bottle, false);
+	}
+	System.err.println(this.getPhilosopherName() + " needs no bottles");
+    }
+    
+    private void tranquil() throws ResetException {
+	drinkStatus = DrinkStatus.TRANQUIL;
+	setNoBottlesNeeded();
+	System.out.println(this.getPhilosopherName() + " is tranquil");
+	color = TRANQUIL_COLOR;
+	t.repaint();
+        delay(TRANQUIL_TIME);
+    }
 
-    // render self
-    //
-    // public void draw(Graphics g) {
-    //     g.setColor(color);
-    //     g.fillOval(x-XSIZE/2, y-YSIZE/2, XSIZE, YSIZE);
-	
-    // }
+    private void needRandomSetOfBottles() {
+	Random random = new Random();
+	int numBottlesNeeded = random.nextInt(bottles.keySet().size());
+	Bottle[] bottleId = bottles.keySet().toArray(new Bottle[0]);
+	ArrayList<Bottle> bottlesClaimed = new ArrayList<Bottle>();
+	int bottlesSampled = 0;
+	while (bottlesSampled < numBottlesNeeded) {
+	    int randomBottle = random.nextInt(numBottlesNeeded);
+	    if (!bottlesClaimed.contains(bottleId[randomBottle])) {
+		bottlesClaimed.add(bottleId[randomBottle]);
+		needsBottle.put(bottleId[randomBottle], true);
+		bottlesSampled++;
+	    }
+	}
+	assert(bottlesClaimed.size() == numBottlesNeeded);
+    }
+
+    private boolean allBottlesReceived() {
+	for (boolean isReceived : bottles.values()) {
+	    if (!isReceived) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    private void requestBottles() {
+	for (Bottle bottle : bottles.keySet().toArray(new Bottle[0])) {
+	    requestBottle(bottle);
+	    yield();
+	}
+	System.err.println(this.getPhilosopherName() + " has requested all bottles");
+    }
+    
+    private void thirst() throws ResetException {
+	drinkStatus = DrinkStatus.THIRSTY;
+	needRandomSetOfBottles();
+	color = WAIT_COLOR;
+        t.repaint();
+	System.out.println(this.getPhilosopherName() + " is thirsty");
+        delay(FUMBLE_TIME);
+	requestBottles();
+	while (!allBottlesReceived()) {} // be hungry until all forks received          
+    }
+
+    private void drink() throws ResetException {
+	drinkStatus = DrinkStatus.DRINKS;
+	System.out.println(this.getPhilosopherName() + " drinks");
+	color = DRINK_COLOR;
+	t.repaint();
+        delay(EAT_TIME);
+    }
 
     public void addForkRequestToken(Fork f, boolean bool) {
 	hasForkRequestToken.put(f, bool);
@@ -463,6 +539,7 @@ class Philosopher extends Thread {
 	hasBottleRequestToken.put(bottle, bool);
     }
     
+    // render self
     public void draw(Graphics g, int i) {
         g.setColor(color);
         //g.fillOval(x-XSIZE/2, y-YSIZE/2, XSIZE, YSIZE);
@@ -501,6 +578,7 @@ class Philosopher extends Thread {
 	color = THINK_COLOR;
 	t.repaint();
         delay(THINK_TIME);
+	while (drinkStatus != DrinkStatus.THIRSTY) {} 
     }
     
     private void requestForks() {
@@ -523,7 +601,7 @@ class Philosopher extends Thread {
 	eatStatus = EatStatus.HUNGRY;
 	color = WAIT_COLOR;
         t.repaint();
-	System.out.println(this.getPhilosopherName() + " hungry");
+	System.out.println(this.getPhilosopherName() + " is hungry");
         delay(FUMBLE_TIME);
 	requestForks();
 	while (!allForksReceived()) {} // be hungry until all forks received          
@@ -545,13 +623,13 @@ class Philosopher extends Thread {
     }
 
     private void eat() throws ResetException {
-	//System.out.println(this.getPhilosopherName() + " lf: " + hasFork.get(leftFork) + " rf: " + hasFork.get(rightFork));
 	eatStatus = EatStatus.EATS;
 	System.out.println(this.getPhilosopherName() + " eats");
 	color = EAT_COLOR;
 	t.repaint();
 	dirtyMyForks();
         delay(EAT_TIME);
+	while (drinkStatus == DrinkStatus.THIRSTY) {}
 	releaseMyForks();
     }
 }
