@@ -84,17 +84,6 @@ class Fork extends Item {
 	return isDirty;
     }
 
-    private  Map<Philosopher,Boolean> receivedByPhilosopher =
-	new HashMap<Philosopher,Boolean>();
-
-    public void setReceived(Philosopher p, boolean b) {
-	receivedByPhilosopher.put(p, b);
-    }
-    
-    public boolean getWhetherReceived(Philosopher p) {
-	return receivedByPhilosopher.get(p);
-    }
-
     public String getName() {
 	return "Fork " + (this + "").substring(5, 8);
     }
@@ -172,7 +161,6 @@ class Item {
     }
 
     public void reset() {
-	System.err.println(" reset to " + x + " " + y);
 	clear();
 	x = orig_x;
 	y = orig_y;
@@ -182,12 +170,11 @@ class Item {
 
     // arguments are coordinates of acquiring philosopher's center
     //
-    public void acquire(int px, int py) {
-	
-	if (!(t.getGraphics() == null))
+    public void acquire(int px, int py, int numForks) {
+	if (t.getGraphics() != null)
 	    clear();
-        x = (orig_x + px)/2;
-        y = (orig_y + py)/2;
+        x = (orig_x + px) / 2;
+        y = (orig_y + py) / 2;
 	t.repaint();
     }
     
@@ -226,31 +213,29 @@ class Bottle extends Item {
 
     public void draw(Graphics g) {
 	g.setColor(Color.pink);
-	super.draw(this.getName(), g);
+	//super.draw(this.getName(), g);
     }
 }
 
 
 
 class Drinker extends Thread {
-
-}
-
-class Diner extends Thread {
-
-}
-
-class Philosopher extends Thread {
-    private static final Color THINK_COLOR = Color.blue;
+    private static final Color DRINK_COLOR = Color.green;
+    private static final Color TRANQUIL_COLOR = Color.blue;
     private static final Color WAIT_COLOR = Color.red;
-    private static final Color EAT_COLOR = Color.green;
-    private static final Color DRINK_COLOR = EAT_COLOR;
-    private static final Color TRANQUIL_COLOR = THINK_COLOR;
-    private static final double THINK_TIME = 4.0;
-    private static final double TRANQUIL_TIME = THINK_TIME;
+
+    private static final double TRANQUIL_TIME = 4.0;
     private static final double FUMBLE_TIME = 2.0;
-    // time between becoming hungry and grabbing first fork
-    private static final double EAT_TIME = 3.0;
+    private static final double DRINK_TIME = 3.0;
+    private Map<Bottle, Boolean> bottles = new HashMap<Bottle, Boolean>();    
+    private enum Status {
+	TRANQUIL, DRINKS, THIRSTY;
+    }
+
+    private Status status;
+    private Map<Bottle,Boolean> hasRequestToken = new HashMap<Bottle,Boolean>();
+
+    private Map<Bottle, Boolean> needsBottle = new HashMap<Bottle, Boolean>();
 
     private Coordinator c;
     private Table t;
@@ -259,285 +244,47 @@ class Philosopher extends Thread {
     private int x;
     private int y;
 
-    public Map<Fork,Boolean> forks = new HashMap<Fork,Boolean>();
-    private Map<Bottle, Boolean> bottles = new HashMap<Bottle, Boolean>();
-    
-    private Map<Philosopher, Boolean> neighbors;
+    Philosopher diner;
     private Random prn;
     private Color color;
 
-    
-    private Map<Fork,Boolean> hasForkRequestToken = new HashMap<Fork,Boolean>();
-    private Map<Bottle, Boolean> hasBottleRequestToken = new HashMap<Bottle, Boolean>();
-    private Map<Bottle, Boolean> needsBottle = new HashMap<Bottle, Boolean>();
-    public void printForks() {
-	System.err.println(this.getPhilosopherName() + "'s Forks");
-	for (Fork f : forks.keySet().toArray(new Fork[0])) {
-	    System.err.println(this.getPhilosopherName() + " has " + f.getName() + "? " + forks.get(f));
-	}
+    public boolean isThirsty() {
+	return status == Status.THIRSTY;
     }
+    
     
     public String getPhilosopherName() {
-    	return "Philosopher " + (this + "").substring(14, 15);
-    }
-    private enum EatStatus {
-	THINKS, HUNGRY, EATS;
-    }
-
-    private enum DrinkStatus {
-	TRANQUIL, DRINKS, THIRSTY;
+	return diner.getPhilosopherName();
     }
     
-    EatStatus eatStatus;
-    DrinkStatus drinkStatus;
-    public void addFork(Fork f, Boolean b) {
-	forks.put(f, b);
-    }
 
     public void addBottle(Bottle bottle, Boolean bool) {
 	bottles.put(bottle, bool);
     }
 
-    // Drinking Actions
 
-    private void requestBottle(Bottle bottle) {
-	if (drinkStatus == DrinkStatus.THIRSTY && needsBottle.get(bottle) && hasBottleRequestToken.get(bottle) && !bottles.get(bottle)) {
-	    bottle.sendRequest();
-	    hasBottleRequestToken.put(bottle, false);
-	} else {
-	    System.err.println(this.getPhilosopherName() + " doesn't request bottle " + bottle.getName());
-	}
-    }
-
-    private void sendBottle(Bottle bottle) {
-	if (hasBottleRequestToken.get(bottle) && bottles.get(bottle) && !(needsBottle.get(bottle) && (drinkStatus == DrinkStatus.DRINKS || forks.get(bottle.getCorrespondingFork())))) {
-	    bottle.send();
-	    bottles.put(bottle, false);
-	} else {
-	    System.err.println(this.getPhilosopherName() + " doesn't send bottle " + bottle.getName());
-	}
-    }
-
-    private boolean isRequestSentToMe(Bottle bottle) {
-	return bottle.isRequestSent() && !hasBottleRequestToken.get(bottle);
-    }
-
-    // if bottle's status is sent and this Philosopher doesn't have the bottle,
-    // then it must have been sent by the other Philosopher. 
-    private boolean isSentToMe(Bottle bottle) {
-	return bottle.isSent() && !bottles.get(bottle);
-    }
-    
-    private void receiveBottleRequest(Bottle bottle) {
-	if (isRequestSentToMe(bottle)) {
-	    hasBottleRequestToken.put(bottle, true);
-	    bottle.receiveRequest();
-	}
-    }
-
-    private void receiveBottle(Bottle bottle) {
-	if (isSentToMe(bottle)) {
-	    bottles.put(bottle, true);
-	    bottle.receive();
-	}
-    }
-	
-    // Dining Actions
-    private void requestFork(Fork f) {
-	if (eatStatus == EatStatus.HUNGRY && hasForkRequestToken.get(f) && !forks.get(f)) {
-	    
-	    System.out.println(this.getPhilosopherName() + " requests " + f.getName());
-	    f.sendRequest();
-	    hasForkRequestToken.put(f, false);
-	} else {
-	    //System.out.println(this.getPhilosopherName() + " doesn't request " + (f == leftFork ? "left fork" : "rightFork"));
-	}
-    }
-
-    private void releaseFork(Fork f) {
-	if (eatStatus != EatStatus.EATS && hasForkRequestToken.get(f) && f.isDirty()) {
-	    System.err.println(this.getPhilosopherName() + " sends fork " + f.getName());
-	    f.send();
-	    f.setClean();
-	    forks.put(f, false);
-	    //f.setReceived(this, false);
-	    f.reset();
-	} else {
-	    System.err.println(this.getPhilosopherName() + " eating status " + eatStatus);
-	    System.err.println(this.getPhilosopherName() + " has request token for " + f.getName() + " " + hasForkRequestToken.get(f));
-	    System.err.println(f.getName() + " dirty? " + f.isDirty());
-	    System.err.println(this.getPhilosopherName() + " doesn't send fork " + f.getName());
-	}
-    }
-
-    private void receiveForkRequest(Fork f) {
-	if (isRequestSentToMe(f)) {
-	    f.receiveRequest();
-	    hasForkRequestToken.put(f, true);
-	}
-    }
-
-    private boolean isRequestSentToMe(Fork f) {
-	return f.isRequestSent() && !hasForkRequestToken.get(f);
-    }
-    // if fork's status is sent and this philosopher doesn't have
-    // the fork then it must have been sent by the other philosopher
-    private boolean isSentToMe(Fork f) {
-	return f.isSent() && !forks.get(f);
-    }
-    private void receiveFork(Fork f) {
-	if (isSentToMe(f)) {
-	    f.receive();
-	    f.setClean();
-	    forks.put(f, true);
-	}
-    }
-    
-    
-    
-    private void haveFork(Fork f) {
-        
-	forks.put(f, true);
-	f.acquire(x, y);
-	System.err.println("acquires fork");
-	//System.out.println(f.getName() + " dirty? " + f.getWhetherDirty());
-	f.setClean();
-	
-	
-    }
-
-    public void addNeighbor(Philosopher p, Boolean b) {
-	neighbors.put(p, b);
-    }
+    	
     // Constructor.
     // cx and cy indicate coordinates of center
     // Note that fillOval method expects coordinates of upper left corner
     // of bounding box instead.
     //
-    public Philosopher(Table T, int cx, int cy,
-                       Coordinator C) {
+    public Drinker(Table T, int cx, int cy,
+		   Coordinator C, String name, Philosopher p) {
 	t = T;
         x = cx;
         y = cy;
-        forks = new HashMap<Fork, Boolean>();
+	diner = p;
 	bottles = new HashMap<Bottle, Boolean>();
         c = C;
         prn = new Random();
-        color = THINK_COLOR;
+        color = TRANQUIL_COLOR;
 
-	neighbors = new HashMap<Philosopher, Boolean>();
-	
-	eatStatus = EatStatus.THINKS;
+	status = Status.TRANQUIL;
 	
     }
 
-    // start method of Thread calls run; you don't
-    //
-
-    public void run() {
-	for (;;) {
-            try {
-                if (c.gate()) {
-		    delay(DRINK_TIME/2.0);
-		}
-		
-                tranquil();
-        
-                if (c.gate()) {
-		    delay(TRANQUIL_TIME/2.0);
-		}
-		
-                thirst();
-
-		if (c.gate()) {
-		    delay(FUMBLE_TIME/2.0);
-		}
-		
-                drink();
-
-	    } catch(ResetException e) { 
-                color = TRANQUIL_COLOR;
-                t.repaint();
-            }
-        }
-    }
     
-    private void setNoBottlesNeeded() {
-	for (Bottle bottle : bottles.keySet().toArray(new Bottle[0])) {
-	    needsBottle.put(bottle, false);
-	}
-	System.err.println(this.getPhilosopherName() + " needs no bottles");
-    }
-    
-    private void tranquil() throws ResetException {
-	drinkStatus = DrinkStatus.TRANQUIL;
-	setNoBottlesNeeded();
-	System.out.println(this.getPhilosopherName() + " is tranquil");
-	color = TRANQUIL_COLOR;
-	t.repaint();
-        delay(TRANQUIL_TIME);
-    }
-
-    private void needRandomSetOfBottles() {
-	Random random = new Random();
-	int numBottlesNeeded = random.nextInt(bottles.keySet().size());
-	Bottle[] bottleId = bottles.keySet().toArray(new Bottle[0]);
-	ArrayList<Bottle> bottlesClaimed = new ArrayList<Bottle>();
-	int bottlesSampled = 0;
-	while (bottlesSampled < numBottlesNeeded) {
-	    int randomBottle = random.nextInt(numBottlesNeeded);
-	    if (!bottlesClaimed.contains(bottleId[randomBottle])) {
-		bottlesClaimed.add(bottleId[randomBottle]);
-		needsBottle.put(bottleId[randomBottle], true);
-		bottlesSampled++;
-	    }
-	}
-	assert(bottlesClaimed.size() == numBottlesNeeded);
-    }
-
-    private boolean allBottlesReceived() {
-	for (boolean isReceived : bottles.values()) {
-	    if (!isReceived) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-    private void requestBottles() {
-	for (Bottle bottle : bottles.keySet().toArray(new Bottle[0])) {
-	    requestBottle(bottle);
-	    yield();
-	}
-	System.err.println(this.getPhilosopherName() + " has requested all bottles");
-    }
-    
-    private void thirst() throws ResetException {
-	drinkStatus = DrinkStatus.THIRSTY;
-	needRandomSetOfBottles();
-	color = WAIT_COLOR;
-        t.repaint();
-	System.out.println(this.getPhilosopherName() + " is thirsty");
-        delay(FUMBLE_TIME);
-	requestBottles();
-	while (!allBottlesReceived()) {} // be hungry until all forks received          
-    }
-
-    private void drink() throws ResetException {
-	drinkStatus = DrinkStatus.DRINKS;
-	System.out.println(this.getPhilosopherName() + " drinks");
-	color = DRINK_COLOR;
-	t.repaint();
-        delay(EAT_TIME);
-    }
-
-    public void addForkRequestToken(Fork f, boolean bool) {
-	hasForkRequestToken.put(f, bool);
-    }
-
-    public void addBottleRequestToken(Bottle bottle, boolean bool) {
-	hasBottleRequestToken.put(bottle, bool);
-    }
     
     // render self
     public void draw(Graphics g, int i) {
@@ -572,39 +319,436 @@ class Philosopher extends Thread {
         }
     }
     
+    
+
+    // start method of Thread calls run; you don't
+    //
+
+    public void run() {
+	for (;;) {
+            try {
+                if (c.gate()) {
+		    delay(DRINK_TIME/2.0);
+		}
+		
+                tranquil();
+        
+                if (c.gate()) {
+		    delay(TRANQUIL_TIME/2.0);
+		}
+		
+                thirst();
+
+		if (c.gate()) {
+		    delay(FUMBLE_TIME/2.0);
+		}
+		
+                drink();
+
+	    } catch(ResetException e) { 
+                color = TRANQUIL_COLOR;
+                t.repaint();
+            }
+        }
+    }
+    // Drinking Actions
+
+    private void requestBottle(Bottle bottle) {
+	if (status == Status.THIRSTY && needsBottle.get(bottle) && hasRequestToken.get(bottle) && !bottles.get(bottle)) {
+	    bottle.sendRequest();
+	    System.err.println(getPhilosopherName() + " requests " + bottle.getName());
+	    hasRequestToken.put(bottle, false);
+	} else {
+	    // System.err.println(getPhilosopherName() + " doesn't request bottle " + bottle.getName() + " because");
+	    // System.err.println(getPhilosopherName() + " is thirsty? " + (status == Status.THIRSTY));
+	    // System.err.println(getPhilosopherName() + " needs bottle? " + needsBottle.get(bottle));
+	    // System.err.println(getPhilosopherName() + " has request token " + bottle.getName() + "? " + hasRequestToken.get(bottle));
+	    // System.err.println(getPhilosopherName() + " has bottle? " + bottles.get(bottle));
+	}
+    }
+
+    private void sendBottle(Bottle bottle) {
+	if (hasRequestToken.get(bottle) && bottles.get(bottle) && !(needsBottle.get(bottle) && (status == Status.DRINKS || diner.getForks().get(bottle.getCorrespondingFork())))) {
+	    bottle.send();
+	    bottles.put(bottle, false);
+	} else {
+	    System.err.println(getPhilosopherName() + " doesn't send bottle " + bottle.getName());
+	}
+    }
+
+    private boolean isRequestSentToMe(Bottle bottle) {
+	return bottle.isRequestSent() && !hasRequestToken.get(bottle);
+    }
+
+    // if bottle's status is sent and this Philosopher doesn't have the bottle,
+    // then it must have been sent by the other Philosopher. 
+    private boolean isSentToMe(Bottle bottle) {
+	return bottle.isSent() && !bottles.get(bottle);
+    }
+    
+    private void receiveBottleRequest(Bottle bottle) {
+	if (isRequestSentToMe(bottle)) {
+	    hasRequestToken.put(bottle, true);
+	    bottle.receiveRequest();
+	} else {
+	    // System.err.println("request not received for " + bottle.getName() + " because");
+	    // System.err.println("    is request sent for " + bottle.getName() + "? " + bottle.isRequestSent());
+	    // System.err.println("    " + getPhilosopherName() + " has request token? " + hasRequestToken.get(bottle));
+	}
+    }
+
+    private void receiveBottle(Bottle bottle) {
+	if (isSentToMe(bottle)) {
+	    bottles.put(bottle, true);
+	    System.err.println(getPhilosopherName() + " receives bottle " + bottle);
+	    bottle.receive();
+	}
+    }
+
+    private void receiveBottles() {
+	for (Bottle bottle : bottles.keySet().toArray(new Bottle[0])) {
+	    receiveBottle(bottle);
+	    yield();
+	}	
+    }
+
+    private void receiveBottleRequests() {
+	for (Bottle bottle : bottles.keySet().toArray(new Bottle[0])) {
+	    receiveBottleRequest(bottle);
+	    yield();
+	}	
+    }
+
+    private void setNoBottlesNeeded() {
+	for (Bottle bottle : bottles.keySet().toArray(new Bottle[0])) {
+	    needsBottle.put(bottle, false);
+	}
+	// System.err.println(getPhilosopherName() + " needs no bottles");
+    }
+    
+    private void tranquil() throws ResetException {
+	status = Status.TRANQUIL;
+	setNoBottlesNeeded();
+	System.out.println(getPhilosopherName() + " is tranquil");
+	color = TRANQUIL_COLOR;
+	t.repaint();
+	receiveBottleRequests();
+        delay(TRANQUIL_TIME);
+    }
+
+    private void needRandomSetOfBottles() {
+	Random random = new Random();
+	int numBottlesNeeded = random.nextInt(bottles.keySet().size() - 1) + 1;
+	Bottle[] bottleId = bottles.keySet().toArray(new Bottle[0]);
+	ArrayList<Bottle> bottlesClaimed = new ArrayList<Bottle>();
+	int bottlesSampled = 0;
+	while (bottlesSampled < numBottlesNeeded) {
+	    int randomBottle = random.nextInt(numBottlesNeeded);
+	    if (!bottlesClaimed.contains(bottleId[randomBottle])) {
+		bottlesClaimed.add(bottleId[randomBottle]);
+		needsBottle.put(bottleId[randomBottle], true);
+		bottlesSampled++;
+	    }
+	}
+	assert(bottlesClaimed.size() == numBottlesNeeded);
+
+	System.err.println(getPhilosopherName() + " needs " + numBottlesNeeded + " bottles");
+	
+	// for (Bottle b : bottlesClaimed) {
+	//     System.err.println("    " + getPhilosopherName() + " has " + b.getName() +  "? " + bottles.get(b));
+	// }
+    }
+
+    private boolean hasAllBottles() {
+	for (boolean isReceived : bottles.values()) {
+	    if (!isReceived) {
+		return false;
+	    }
+	}
+	return true;
+    }
+
+    private void requestBottles() {
+	for (Bottle bottle : bottles.keySet().toArray(new Bottle[0])) {
+
+	    if (needsBottle.get(bottle)) {
+		requestBottle(bottle);
+	    }
+
+	    yield();
+	}
+	// System.err.println(getPhilosopherName() + " has requested all bottles");
+    }
+    
+    private void thirst() throws ResetException {
+	status = Status.THIRSTY;
+	color = WAIT_COLOR;
+        t.repaint();
+	System.out.println(getPhilosopherName() + " is thirsty");
+        delay(FUMBLE_TIME);
+	needRandomSetOfBottles();
+	requestBottles();
+	receiveBottles();
+	System.err.println("WAIT for " + getPhilosopherName() + " to have all bottles");
+	while (!hasAllBottles()) {} // be hungry until all forks received
+	System.err.println("WAIT ENDS " + getPhilosopherName() + " has all bottles");
+    }
+
+    private void drink() throws ResetException {
+	status = Status.DRINKS;
+	System.out.println(getPhilosopherName() + " drinks");
+	color = DRINK_COLOR;
+	t.repaint();
+        delay(DRINK_TIME);
+    }
+
+    public void addRequestToken(Bottle bottle, boolean bool) {
+	hasRequestToken.put(bottle, bool);
+    }
+
+    public Map<Bottle, Boolean> getRequestTokens() {
+	return hasRequestToken;
+    }
+
+}
+
+
+class Philosopher extends Thread {
+
+    private Coordinator c;
+    private Table t;
+    private static final int XSIZE = 50;
+    private static final int YSIZE = 50;
+    private int x;
+    private int y;
+
+    private static final Color THINK_COLOR = Color.blue;
+    private static final Color WAIT_COLOR = Color.red;
+    private static final Color EAT_COLOR = Color.green;
+
+    private Color color;
+
+    private static final double THINK_TIME = 4.0;
+    
+    private static final double FUMBLE_TIME = 2.0;
+    // time between becoming hungry and grabbing first fork
+    private static final double EAT_TIME = 3.0;
+    private Map<Fork,Boolean> forks = new HashMap<Fork,Boolean>();
+
+    private Random prn;
+
+    
+    private Drinker drinker;
+
+    private int getNumForks() {
+	int numForks = 0;
+	for (boolean hasFork : forks.values()) {
+	    if (hasFork) numForks++;
+	}
+	return numForks;
+    }
+    
+    public void addDrinkerRequestToken(Bottle bottle, Boolean bool) {
+	drinker.addRequestToken(bottle, bool);
+    }
+
+    public Map<Bottle, Boolean> getDrinkerRequestTokens() {
+	return drinker.getRequestTokens();
+    }
+
+    public void addBottle(Bottle bottle, Boolean bool) {
+	drinker.addBottle(bottle, bool);
+    }
+
+    public Map<Fork, Boolean> getForks() {
+	return forks;
+    }
+    
+    private enum Status {
+	THINKS, HUNGRY, EATS;
+    }
+    private Status status;
+
+    private Map<Fork, Boolean> hasRequestToken = new HashMap<Fork, Boolean>();
+
+    private void acquireStartingForks() {
+	int numAcquired = 0;
+	for (Fork f : forks.keySet().toArray(new Fork[0])) {
+	    if (forks.get(f)) {
+		System.err.println(f.getName() + "acquired");
+		f.acquire(x, y, numAcquired);
+		numAcquired++;
+	    }
+	}
+    }
+    // Thread start method calls run
+    public void run() {
+	acquireStartingForks();
+	//drinker.start();
+	for (;;) {
+            try {
+                if (c.gate()) {
+		    delay(EAT_TIME/2.0);
+		}
+		
+                think();
+        
+                if (c.gate()) {
+		    delay(THINK_TIME/2.0);
+		}
+		
+                hunger();
+
+		if (c.gate()) {
+		    delay(FUMBLE_TIME/2.0);
+		}
+		
+                eat();
+
+	    } catch(ResetException e) { 
+                color = THINK_COLOR;
+                t.repaint();
+            }
+        }
+    }
+    
+    // Dining Actions
+    
+    private void releaseFork(Fork f) {
+	if (status != Status.EATS && hasRequestToken.get(f) && f.isDirty()) {
+	    System.err.println(getPhilosopherName() + " sends fork " + f.getName());
+	    f.send();
+	    f.setClean();
+	    forks.put(f, false);
+	    f.reset();
+	} else {
+	    
+	    // System.err.println(getPhilosopherName() + " doesn't send " + f.getName());
+	    // if (status == Status.EATS) System.err.println(getPhilosopherName() + " is eating");
+	    // if (!hasRequestToken.get(f)) System.err.println(getPhilosopherName() + " doesn't have request token");
+	    // if (!f.isDirty()) System.err.println(f.getName() + " is clean");
+	    
+	}
+    }
+
+    private void receiveRequest(Fork f) {
+	if (isRequestSentToMe(f)) {
+	    f.receiveRequest();
+	    hasRequestToken.put(f, true);
+	} else {
+	    // System.err.println("request not received for " + f.getName() + " because");
+	    // System.err.println("    is request sent for " + f.getName() + "? " + f.isRequestSent());
+	    // System.err.println("    " + getPhilosopherName() + " has request token? " + hasRequestToken.get(f));
+	}
+    }
+
+    private boolean isRequestSentToMe(Fork f) {
+	return f.isRequestSent() && !hasRequestToken.get(f);
+    }
+    // if fork's status is sent and this philosopher doesn't have
+    // the fork then it must have been sent by the other philosopher
+    private boolean isSentToMe(Fork f) {
+	return f.isSent() && !forks.get(f);
+    }
+
+    private void receiveRequests() {
+	for (Fork f : forks.keySet().toArray(new Fork[0])) {
+	    receiveRequest(f);
+	    yield();
+	}	
+    }
+
     private void think() throws ResetException {
-	eatStatus = EatStatus.THINKS;
-	System.out.println(this.getPhilosopherName() + " thinks");
+	status = Status.THINKS;
+	receiveRequests();
+	receiveForks();
+	releaseMyForks();
+	System.out.println(getPhilosopherName() + " thinks");
 	color = THINK_COLOR;
 	t.repaint();
         delay(THINK_TIME);
-	while (drinkStatus != DrinkStatus.THIRSTY) {} 
+	// System.err.println("WAIT for " + getPhilosopherName() + " to be thirsty");
+	// while (!drinker.isThirsty()) {}
+	// System.err.println("WAIT ENDS " + getPhilosopherName() + " is thirsty");
     }
-    
+    private void requestFork(Fork f) {
+	if (status == Status.HUNGRY && hasRequestToken.get(f) && !forks.get(f)) {
+	    
+	    System.out.println(getPhilosopherName() + " requests " + f.getName());
+	    f.sendRequest();
+	    hasRequestToken.put(f, false);
+	} else {
+	    if (!hasRequestToken.get(f)) {
+		System.err.println(getPhilosopherName() + " doesn't have request token");
+	    }
+	    if (forks.get(f)) {
+		System.err.println(getPhilosopherName() + " already has " + f.getName());
+	    }
+	    
+	    
+	}
+    }
+
     private void requestForks() {
 	for (Fork f : forks.keySet().toArray(new Fork[0])) {
 	    requestFork(f);
 	    yield();
 	}
-	System.err.println(this.getPhilosopherName() + " has requested all forks");
+	System.err.println(getPhilosopherName() + " has requested all forks");
     }
-    private boolean allForksReceived() {
+
+    private void receiveFork(Fork f) {
+	if (isSentToMe(f)) {
+	    System.err.println(getPhilosopherName() + " receives fork " + f.getName());
+	    f.receive();
+	    f.setClean();
+	    f.acquire(x, y, getNumForks());
+	    forks.put(f, true);
+	}
+
+	// debug
+	else {
+	    // if (!f.isSent()) {
+	    // 	System.err.println(f.getName() + " hasn't been sent to " + getPhilosopherName() + " by other philosopher");
+	    // }
+	    // if (forks.get(f)) {
+	    // 	System.err.println(getPhilosopherName() + " already has " + f.getName());
+	    // }
+	}
+    }
+    
+    private void receiveForks() {
+	for (Fork f : forks.keySet().toArray(new Fork[0])) {
+	    receiveFork(f);
+	    yield();
+	}
+    }
+    
+    private boolean hasAllForks() {
 	for (boolean isReceived : forks.values()) {
 	    if (!isReceived) {
 		return false;
 	    }
 	}
-	System.err.println(this.getPhilosopherName() + " has received all forks");
+	//System.err.println(getPhilosopherName() + " has all forks");
 	return true;
     }
     private void hunger() throws ResetException {
-	eatStatus = EatStatus.HUNGRY;
+	status = Status.HUNGRY;
+	receiveRequests();
+	receiveForks();
+	releaseMyForks();
 	color = WAIT_COLOR;
         t.repaint();
-	System.out.println(this.getPhilosopherName() + " is hungry");
+	System.out.println(getPhilosopherName() + " is hungry");
         delay(FUMBLE_TIME);
 	requestForks();
-	while (!allForksReceived()) {} // be hungry until all forks received          
+	
+	System.err.println("WAIT for " + getPhilosopherName() + " to have all forks");
+	while (!hasAllForks()) {
+	    receiveForks();
+	} // be hungry until all forks received
+	System.err.println("WAIT ENDS " + getPhilosopherName() + " has all forks");
     }
 
     private void dirtyMyForks() {
@@ -615,24 +759,103 @@ class Philosopher extends Thread {
 
     private void releaseMyForks() {
         for (Fork fork : forks.keySet().toArray(new Fork[0])) {
-	    releaseFork(fork);
-	    yield();
+	    if (forks.get(fork)) {
+		    releaseFork(fork);
+		    yield();
+		}
 	}
 	
-	System.err.println(this.getPhilosopherName() + " has released all forks");
+	//System.err.println(getPhilosopherName() + " has released all forks");
     }
 
     private void eat() throws ResetException {
-	eatStatus = EatStatus.EATS;
-	System.out.println(this.getPhilosopherName() + " eats");
+	status = Status.EATS;
+	receiveRequests();
+	receiveForks();
+	System.out.println(getPhilosopherName() + " eats");
 	color = EAT_COLOR;
 	t.repaint();
 	dirtyMyForks();
         delay(EAT_TIME);
-	while (drinkStatus == DrinkStatus.THIRSTY) {}
-	releaseMyForks();
+	// System.err.println("WAIT for " + getPhilosopherName() + " to not be thirsty");
+	// while (drinker.isThirsty()) {}
+	// System.err.println("WAIT ENDS " + getPhilosopherName() + " isn't thirsty");
     }
+
+
+    public Philosopher(Table T, int cx, int cy, Coordinator C) {
+	t = T;
+        x = cx;
+        y = cy;
+	
+	drinker = new Drinker(T, cx, cy, C, getPhilosopherName(), this);
+        
+	forks = new HashMap<Fork, Boolean>();
+        c = C;
+        prn = new Random();
+        color = THINK_COLOR;
+
+	status = Status.THINKS;
+    }
+    
+    public void printForks() {
+	System.err.println(getPhilosopherName() + "'s Forks");
+	for (Fork f : forks.keySet().toArray(new Fork[0])) {
+	    System.err.println(getPhilosopherName() + " has " + f.getName() + "? " + forks.get(f));
+	}
+    }
+
+    public void addFork(Fork f, Boolean b) {
+	forks.put(f, b);
+    }
+
+    public void addRequestToken(Fork f, boolean bool) {
+	hasRequestToken.put(f, bool);
+    }
+
+    public Map<Fork, Boolean> getRequestTokens() {
+	return hasRequestToken;
+    }
+
+    // sleep for secs +- FUDGE (%) seconds
+    //
+    private static final double FUDGE = 0.2;
+    private void delay(double secs) throws ResetException {
+        double ms = 1000 * secs;
+        int window = (int) (2.0 * ms * FUDGE);
+        int add_in = prn.nextInt() % window;
+        int original_duration = (int) ((1.0-FUDGE) * ms + add_in);
+        int duration = original_duration;
+        for (;;) {
+            try {
+                Thread.sleep(duration);
+                return;
+            } catch(InterruptedException e) {
+                if (c.isReset()) {
+                    throw new ResetException();
+                } else {        // suspended
+                    c.gate();   // wait until resumed
+                    duration = original_duration / 2;
+                    // don't wake up instantly; sleep for about half
+                    // as long as originally instructed
+                }
+            }
+        }
+    }
+
+    // render self
+    public void draw(Graphics g, int i) {
+        g.setColor(color);
+        //g.fillOval(x-XSIZE/2, y-YSIZE/2, XSIZE, YSIZE);
+	g.drawString(i + "", x, y);
+    }
+
+    public String getPhilosopherName() {
+    	return "Philosopher " + Integer.parseInt((this + "").substring(14, 15)) / 2;
+    }
+
 }
+
 
 // Graphics panel in which philosophers and forks appear.
 //
@@ -645,8 +868,6 @@ class Table extends JPanel {
     private Fork[] forks;
     private Philosopher[] philosophers;
     private Bottle[] bottles;
-    private  Map<Philosopher, Map<Philosopher, Boolean>> neighbors =
-	new HashMap<Philosopher, Map<Philosopher, Boolean>>();
 
     public void pause() {
         c.pause();
@@ -729,8 +950,8 @@ class Table extends JPanel {
 		double angle = Math.PI/2 + 2*Math.PI/NUM_PHILS*(i-0.5);
 		// place forks and bottles according to graph.txt
 		forks[i] = new Fork(this,
-				    (int) (CANVAS_SIZE/2.0 + CANVAS_SIZE/6.0 * Math.cos(angle) + 10),
-				    (int) (CANVAS_SIZE/2.0 - CANVAS_SIZE/6.0 * Math.sin(angle)) + 10);
+				    (int) (CANVAS_SIZE/2.0),
+				    (int) (CANVAS_SIZE/2.0));
 		bottles[i] = new Bottle(this,
 					(int) (CANVAS_SIZE/2.0 + CANVAS_SIZE/6.0 * Math.cos(angle)),
 					(int) (CANVAS_SIZE/2.0 - CANVAS_SIZE/6.0 * Math.sin(angle)));
@@ -748,18 +969,49 @@ class Table extends JPanel {
 
 	
 	    int philosopherCount = 0;
+	    int forkAndBottleCount = 0;
 	    for (Object l : Arrays.copyOfRange(lines, 2, lines.length)) {
-		for (String neighborString : l.toString().split(" ")) {
-		    int neighborInt = Integer.parseInt(neighborString.substring(0, 1));
-		    philosophers[philosopherCount].addFork(forks[neighborInt], ifStarred(neighborString) ? false : true);
-		    philosophers[philosopherCount].addForkRequestToken(forks[neighborInt], ifStarred(neighborString) ? true : false);
-		    philosophers[philosopherCount].addBottle(bottles[neighborInt], ifStarred(neighborString) ? false : true);
-		    philosophers[philosopherCount].addBottleRequestToken(bottles[neighborInt], ifStarred(neighborString) ? true : false);
+		if (!l.toString().equals("-") && !l.toString().equals("\n") && l.toString().length() != 0) {
+		    for (String neighborString : l.toString().split(" ")) {
+			int neighborInt = Integer.parseInt(neighborString.substring(0, 1));
+
+			philosophers[philosopherCount].addFork(forks[forkAndBottleCount], true);
+			philosophers[philosopherCount].addRequestToken(forks[forkAndBottleCount], false);
+			philosophers[philosopherCount].addBottle(bottles[forkAndBottleCount], true);
+			philosophers[philosopherCount].addDrinkerRequestToken(bottles[forkAndBottleCount], false);
+			philosophers[neighborInt].addFork(forks[forkAndBottleCount], false);
+			philosophers[neighborInt].addRequestToken(forks[forkAndBottleCount], true);
+			philosophers[neighborInt].addBottle(bottles[forkAndBottleCount], false);
+			philosophers[neighborInt].addDrinkerRequestToken(bottles[forkAndBottleCount], true);
+			forkAndBottleCount++;
+		    }
 		}
 		philosopherCount++;
 	    }
 
-	  
+	    
+	    for (int i = 0; i < NUM_PHILS; i++) {
+		
+		System.err.println(philosophers[i].getPhilosopherName() + "'s Eat tokens:");
+		for (Fork fork : philosophers[i].getRequestTokens().keySet().toArray(new Fork[0])) {
+		    System.err.println(fork.getName() + " : " + philosophers[i].getRequestTokens().get(fork));
+		}    
+	    }
+
+	    for (int i = 0; i < NUM_PHILS; i++) {
+		
+		System.err.println(philosophers[i].getPhilosopherName() + "'s forks:");
+		for (Fork fork : philosophers[i].getForks().keySet().toArray(new Fork[0])) {
+		    System.err.println(fork.getName() + " : " + philosophers[i].getForks().get(fork));
+		}    
+	    }
+	    
+	    // for (int i = 0; i < NUM_PHILS; i++) {
+	    // 	System.err.println(philosophers[i].getPhilosopherName() + "'s Drink tokens:");
+	    // 	for (Bottle bottle : philosophers[i].getDrinkerRequestTokens().keySet().toArray(new Bottle[0])) {
+	    // 	    System.err.println(bottle.getName() + " : " + philosophers[i].getDrinkerRequestTokens().get(bottle));
+	    // 	}
+	    // }
 	    System.err.println("\n\nStart");
 	    for (int i = 0; i < NUM_PHILS; i++) {
 		philosophers[i].start();

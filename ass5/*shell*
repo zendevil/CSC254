@@ -1,0 +1,694 @@
+bash-3.2$ java Dining
+Placing Fork 6ec at 180 180
+Placing Fork 172 at 180 180
+Placing Fork b3d at 180 180
+Placing Fork 5fd at 180 180
+Placing Fork 10d at 180 180
+Placing Fork fe1 at 180 180
+Placing Fork 6fb at 180 180
+Philosopher 0's Eat tokens:
+Fork 172 : false
+Fork b3d : false
+Fork 6ec : false
+Philosopher 1's Eat tokens:
+Fork fe1 : true
+Fork 5fd : false
+Fork b3d : true
+Philosopher 2's Eat tokens:
+Fork 5fd : true
+Fork 6fb : true
+Philosopher 3's Eat tokens:
+Fork fe1 : false
+Fork 10d : false
+Fork 172 : true
+Fork 6fb : false
+Philosopher 4's Eat tokens:
+Fork 10d : true
+Fork 6ec : true
+Philosopher 0's forks:
+Fork 172 : true
+Fork b3d : true
+Fork 6ec : true
+Philosopher 1's forks:
+Fork fe1 : false
+Fork 5fd : true
+Fork b3d : false
+Philosopher 2's forks:
+Fork 5fd : false
+Fork 6fb : false
+Philosopher 3's forks:
+Fork fe1 : true
+cFork 10d : true
+Fork 172 : false
+Fork 6fb : true
+Philosopher 4's forks:
+Fork 10d : false
+Fork 6ec : false
+
+
+Start
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork fe1 false
+Fork fe1 dirty? true
+Philosopher 3 doesn't send fork Fork fe1
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 10d false
+Fork 10d dirty? true
+Philosopher 3 doesn't send fork Fork 10d
+Philosopher 3 sends fork Fork 172
+Fork 172Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 6fb false
+Fork 6fb dirty? true
+Philosopher 3 doesn't send fork Fork 6fb
+Philosopher 3 has released all forks
+Philosopher 3 thinks
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 172 false
+Fork 172 dirty? false
+Philosopher 0 doesn't send fork Fork 172
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork b3d false
+Fork b3d dirty? true
+Philosopher 0 doesn't send fork Fork b3d
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 6ec false
+Fork 6ec dirty? true
+Philosopher 0 doesn't send fork Fork 6ec
+Philosopher 0 has released all forks
+Philosopher 0 thinks
+Philosopher 4 sends fork Fork 10d
+Fork 10dPhilosopher 4 sends fork Fork 6ec
+Fork 6ecPhilosopher 4 has released all forks
+Philosopher 4 thinks
+Philosopher 2 sends fork Fork 5fd
+Fork 5fdPhilosopher 2 sends fork Fork 6fb
+Fork 6fbPhilosopher 2 has released all forks
+Philosopher 2 thinks
+Philosopher 1 sends fork Fork fe1
+Fork fe1Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork 5fd false
+Fork 5fd dirty? false
+Philosopher 1 doesn't send fork Fork 5fd
+Philosopher 1 sends fork Fork b3d
+Fork b3dPhilosopher 1 has released all forks
+Philosopher 1 thinks
+Philosopher 1 is hungry
+Philosopher 3 is hungry
+Philosopher 0 is hungry
+Philosopher 2 is hungry
+Philosopher 4 is hungry
+Philosopher 1 requests Fork fe1
+Philosopher 1 doesn't have request token
+Philosopher 1 already has Fork 5fd
+Philosopher 1 requests Fork b3d
+Philosopher 1 has requested all forks
+Philosopher 1 receives fork Fork@fe18270
+Philosopher 1 already has Fork 5fd
+Philosopher 1 receives fork Fork@b3d7190
+WAIT for Philosopher 1 to have all forks
+Philosopher 1 has all forks
+WAIT ENDS Philosopher 1 has all forks
+Philosopher 1 eats
+Philosopher 2 requests Fork 5fd
+Philosopher 2 requests Fork 6fb
+Philosopher 2 has requested all forks
+Philosopher 2 receives fork Fork@5fdba6f9
+Philosopher 2 receives fork Fork@6fb0d3ed
+WAIT for Philosopher 2 to have all forks
+Philosopher 2 has all forks
+WAIT ENDS Philosopher 2 has all forks
+Philosopher 2 eats
+Philosopher 0 doesn't have request token
+Philosopher 0 already has Fork 172
+Philosopher 0 doesn't have request token
+Philosopher 0 already has Fork b3d
+Philosopher 0 doesn't have request token
+Philosopher 0 already has Fork 6ec
+Philosopher 0 has requested all forks
+Philosopher 0 already has Fork 172
+Fork b3d hasn't been sent to Philosopher 0
+Philosopher 0 already has Fork b3d
+Philosopher 0 already has Fork 6ec
+WAIT for Philosopher 0 to have all forks
+Philosopher 0 has all forks
+WAIT ENDS Philosopher 0 has all forks
+Philosopher 0 eats
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork fe1
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork 10d
+Philosopher 3 requests Fork 172
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork 6fb
+Philosopher 3 has requested all forks
+Fork fe1 hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork fe1
+Philosopher 3 already has Fork 10d
+Philosopher 3 receives fork Fork@17211155
+Fork 6fb hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork 6fb
+WAIT for Philosopher 3 to have all forks
+Philosopher 3 has all forks
+WAIT ENDS Philosopher 3 has all forks
+Philosopher 3 eats
+Philosopher 4 requests Fork 10d
+Philosopher 4 requests Fork 6ec
+Philosopher 4 has requested all forks
+Philosopher 4 receives fork Fork@10d59286
+Philosopher 4 receives fork Fork@6eceb130
+WAIT for Philosopher 4 to have all forks
+Philosopher 4 has all forks
+WAIT ENDS Philosopher 4 has all forks
+Philosopher 4 eats
+Philosopher 2 eating status THINKS
+Philosopher 2 has request token for Fork 5fd false
+Fork 5fd dirty? true
+Philosopher 2 doesn't send fork Fork 5fd
+Philosopher 2 eating status THINKS
+Philosopher 2 has request token for Fork 6fb false
+Fork 6fb dirty? true
+Philosopher 2 doesn't send fork Fork 6fb
+Philosopher 2 has released all forks
+Philosopher 2 thinks
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork fe1 false
+Fork fe1 dirty? true
+Philosopher 1 doesn't send fork Fork fe1
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork 5fd false
+Fork 5fd dirty? true
+Philosopher 1 doesn't send fork Fork 5fd
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork b3d false
+Fork b3d dirty? true
+Philosopher 1 doesn't send fork Fork b3d
+Philosopher 1 has released all forks
+Philosopher 1 thinks
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 172 false
+Fork 172 dirty? true
+Philosopher 0 doesn't send fork Fork 172
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork b3d false
+Fork b3d dirty? true
+Philosopher 0 doesn't send fork Fork b3d
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 6ec false
+Fork 6ec dirty? true
+Philosopher 0 doesn't send fork Fork 6ec
+Philosopher 0 has released all forks
+Philosopher 0 thinks
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork fe1 false
+Fork fe1 dirty? true
+Philosopher 3 doesn't send fork Fork fe1
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 10d false
+Fork 10d dirty? true
+Philosopher 3 doesn't send fork Fork 10d
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 172 false
+Fork 172 dirty? true
+Philosopher 3 doesn't send fork Fork 172
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 6fb false
+Fork 6fb dirty? true
+Philosopher 3 doesn't send fork Fork 6fb
+Philosopher 3 has released all forks
+Philosopher 3 thinks
+Philosopher 4 eating status THINKS
+Philosopher 4 has request token for Fork 10d false
+Fork 10d dirty? true
+Philosopher 4 doesn't send fork Fork 10d
+Philosopher 4 eating status THINKS
+Philosopher 4 has request token for Fork 6ec false
+Fork 6ec dirty? true
+Philosopher 4 doesn't send fork Fork 6ec
+Philosopher 4 has released all forks
+Philosopher 4 thinks
+Philosopher 2 is hungry
+Philosopher 0 is hungry
+Philosopher 0 already has Fork 172
+Philosopher 0 already has Fork b3d
+Philosopher 0 already has Fork 6ec
+Philosopher 0 has requested all forks
+Fork 172 hasn't been sent to Philosopher 0
+Philosopher 0 already has Fork 172
+Fork b3d hasn't been sent to Philosopher 0
+Philosopher 0 already has Fork b3d
+Fork 6ec hasn't been sent to Philosopher 0
+Philosopher 0 already has Fork 6ec
+WAIT for Philosopher 0 to have all forks
+Philosopher 0 has all forks
+WAIT ENDS Philosopher 0 has all forks
+Philosopher 0 eats
+Philosopher 4 is hungry
+Philosopher 2 already has Fork 5fd
+Philosopher 2 already has Fork 6fb
+Philosopher 2 has requested all forks
+Fork 5fd hasn't been sent to Philosopher 2
+Philosopher 2 already has Fork 5fd
+Fork 6fb hasn't been sent to Philosopher 2
+Philosopher 2 already has Fork 6fb
+WAIT for Philosopher 2 to have all forks
+Philosopher 2 has all forks
+WAIT ENDS Philosopher 2 has all forks
+Philosopher 2 eats
+Philosopher 1 is hungry
+Philosopher 3 is hungry
+Philosopher 4 already has Fork 10d
+Philosopher 4 doesn't have request token
+Philosopher 4 already has Fork 6ec
+Philosopher 4 has requested all forks
+Fork 10d hasn't been sent to Philosopher 4
+Philosopher 4 already has Fork 10d
+Fork 6ec hasn't been sent to Philosopher 4
+Philosopher 4 already has Fork 6ec
+WAIT for Philosopher 4 to have all forks
+Philosopher 4 has all forks
+WAIT ENDS Philosopher 4 has all forks
+Philosopher 4 eats
+Philosopher 1 already has Fork fe1
+Philosopher 1 doesn't have request token
+Philosopher 1 already has Fork 5fd
+Philosopher 1 doesn't have request token
+Philosopher 1 already has Fork b3d
+Philosopher 1 has requested all forks
+Fork fe1 hasn't been sent to Philosopher 1
+Philosopher 1 already has Fork fe1
+Fork 5fd hasn't been sent to Philosopher 1
+Philosopher 1 already has Fork 5fd
+Fork b3d hasn't been sent to Philosopher 1
+Philosopher 1 already has Fork b3d
+WAIT for Philosopher 1 to have all forks
+Philosopher 1 has all forks
+WAIT ENDS Philosopher 1 has all forks
+Philosopher 1 eats
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork fe1
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork 10d
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork 172
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork 6fb
+Philosopher 3 has requested all forks
+Fork fe1 hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork fe1
+Fork 10d hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork 10d
+Fork 172 hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork 172
+Fork 6fb hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork 6fb
+WAIT for Philosopher 3 to have all forks
+Philosopher 3 has all forks
+WAIT ENDS Philosopher 3 has all forks
+Philosopher 3 eats
+Philosopher 2 sends fork Fork 5fd
+Fork 5fdPhilosopher 2 sends fork Fork 6fb
+Fork 6fbPhilosopher 2 has released all forks
+Philosopher 2 thinks
+Philosopher 0 sends fork Fork 172
+Fork 172Philosopher 0 sends fork Fork b3d
+Fork b3dPhilosopher 0 sends fork Fork 6ec
+Fork 6ecPhilosopher 0 has released all forks
+Philosopher 0 thinks
+Philosopher 1 sends fork Fork fe1
+Fork fe1Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork 5fd false
+Fork 5fd dirty? false
+Philosopher 1 doesn't send fork Fork 5fd
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork b3d false
+Fork b3d dirty? false
+Philosopher 1 doesn't send fork Fork b3d
+Philosopher 1 has released all forks
+Philosopher 1 thinks
+Philosopher 4 sends fork Fork 10d
+Fork 10dPhilosopher 4 eating status THINKS
+Philosopher 4 has request token for Fork 6ec false
+Fork 6ec dirty? false
+Philosopher 4 doesn't send fork Fork 6ec
+Philosopher 4 has released all forks
+Philosopher 4 thinks
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork fe1 false
+Fork fe1 dirty? false
+Philosopher 3 doesn't send fork Fork fe1
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 10d false
+Fork 10d dirty? false
+Philosopher 3 doesn't send fork Fork 10d
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 172 false
+Fork 172 dirty? false
+Philosopher 3 doesn't send fork Fork 172
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 6fb false
+Fork 6fb dirty? false
+Philosopher 3 doesn't send fork Fork 6fb
+Philosopher 3 has released all forks
+Philosopher 3 thinks
+Philosopher 1 is hungry
+Philosopher 2 is hungry
+Philosopher 3 is hungry
+Philosopher 2 requests Fork 5fd
+Philosopher 2 requests Fork 6fb
+Philosopher 2 has requested all forks
+Philosopher 2 receives fork Fork@5fdba6f9
+Philosopher 2 receives fork Fork@6fb0d3ed
+WAIT for Philosopher 2 to have all forks
+Philosopher 2 has all forks
+WAIT ENDS Philosopher 2 has all forks
+Philosopher 2 eats
+Philosopher 0 is hungry
+Philosopher 1 requests Fork fe1
+Philosopher 1 doesn't have request token
+Philosopher 1 already has Fork 5fd
+Philosopher 1 doesn't have request token
+Philosopher 1 already has Fork b3d
+Philosopher 1 has requested all forks
+Philosopher 1 receives fork Fork@fe18270
+Fork 5fd hasn't been sent to Philosopher 1
+Philosopher 1 already has Fork 5fd
+Philosopher 1 already has Fork b3d
+WAIT for Philosopher 1 to have all forks
+Philosopher 1 has all forks
+WAIT ENDS Philosopher 1 has all forks
+Philosopher 1 eats
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork fe1
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork 10d
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork 172
+Philosopher 3 doesn't have request token
+Philosopher 3 already has Fork 6fb
+Philosopher 3 has requested all forks
+Fork fe1 hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork fe1
+Philosopher 3 already has Fork 10d
+Philosopher 3 already has Fork 172
+Fork 6fb hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork 6fb
+WAIT for Philosopher 3 to have all forks
+Philosopher 3 has all forks
+WAIT ENDS Philosopher 3 has all forks
+Philosopher 3 eats
+Philosopher 4 is hungry
+Philosopher 4 requests Fork 10d
+Philosopher 4 doesn't have request token
+Philosopher 4 already has Fork 6ec
+Philosopher 4 has requested all forks
+Philosopher 4 receives fork Fork@10d59286
+Philosopher 4 already has Fork 6ec
+WAIT for Philosopher 4 to have all forks
+Philosopher 4 has all forks
+WAIT ENDS Philosopher 4 has all forks
+Philosopher 4 eats
+Philosopher 0 requests Fork 172
+Philosopher 0 requests Fork b3d
+Philosopher 0 requests Fork 6ec
+Philosopher 0 has requested all forks
+Philosopher 0 receives fork Fork@17211155
+Philosopher 0 receives fork Fork@b3d7190
+Philosopher 0 receives fork Fork@6eceb130
+WAIT for Philosopher 0 to have all forks
+Philosopher 0 has all forks
+WAIT ENDS Philosopher 0 has all forks
+Philosopher 0 eats
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork fe1 false
+Fork fe1 dirty? true
+Philosopher 1 doesn't send fork Fork fe1
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork 5fd false
+Fork 5fd dirty? true
+Philosopher 1 doesn't send fork Fork 5fd
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork b3d false
+Fork b3d dirty? true
+Philosopher 1 doesn't send fork Fork b3d
+Philosopher 1 has released all forks
+Philosopher 1 thinks
+Philosopher 2 eating status THINKS
+Philosopher 2 has request token for Fork 5fd false
+Fork 5fd dirty? true
+Philosopher 2 doesn't send fork Fork 5fd
+Philosopher 2 eating status THINKS
+Philosopher 2 has request token for Fork 6fb false
+Fork 6fb dirty? true
+Philosopher 2 doesn't send fork Fork 6fb
+Philosopher 2 has released all forks
+Philosopher 2 thinks
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 172 false
+Fork 172 dirty? true
+Philosopher 0 doesn't send fork Fork 172
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork b3d false
+Fork b3d dirty? true
+Philosopher 0 doesn't send fork Fork b3d
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 6ec false
+Fork 6ec dirty? true
+Philosopher 0 doesn't send fork Fork 6ec
+Philosopher 0 has released all forks
+Philosopher 0 thinks
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork fe1 false
+Fork fe1 dirty? true
+Philosopher 3 doesn't send fork Fork fe1
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 10d false
+Fork 10d dirty? true
+Philosopher 3 doesn't send fork Fork 10d
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 172 false
+Fork 172 dirty? true
+Philosopher 3 doesn't send fork Fork 172
+Philosopher 3 eating status THINKS
+Philosopher 3 has request token for Fork 6fb false
+Fork 6fb dirty? true
+Philosopher 3 doesn't send fork Fork 6fb
+Philosopher 3 has released all forks
+Philosopher 3 thinks
+Philosopher 4 eating status THINKS
+Philosopher 4 has request token for Fork 10d false
+Fork 10d dirty? true
+Philosopher 4 doesn't send fork Fork 10d
+Philosopher 4 eating status THINKS
+Philosopher 4 has request token for Fork 6ec false
+Fork 6ec dirty? true
+Philosopher 4 doesn't send fork Fork 6ec
+Philosopher 4 has released all forks
+Philosopher 4 thinks
+Philosopher 3 is hungry
+Philosopher 2 is hungry
+Philosopher 4 is hungry
+Philosopher 3 already has Fork fe1
+Philosopher 3 already has Fork 10d
+Philosopher 3 already has Fork 172
+Philosopher 3 already has Fork 6fb
+Philosopher 3 has requested all forks
+Fork fe1 hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork fe1
+Fork 10d hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork 10d
+Fork 172 hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork 172
+Fork 6fb hasn't been sent to Philosopher 3
+Philosopher 3 already has Fork 6fb
+WAIT for Philosopher 3 to have all forks
+Philosopher 3 has all forks
+WAIT ENDS Philosopher 3 has all forks
+Philosopher 3 eats
+Philosopher 1 is hungry
+Philosopher 0 is hungry
+Philosopher 1 doesn't have request token
+Philosopher 1 already has Fork fe1
+Philosopher 1 doesn't have request token
+Philosopher 1 already has Fork 5fd
+Philosopher 1 already has Fork b3d
+Philosopher 1 has requested all forks
+Fork fe1 hasn't been sent to Philosopher 1
+Philosopher 1 already has Fork fe1
+Fork 5fd hasn't been sent to Philosopher 1
+Philosopher 1 already has Fork 5fd
+Fork b3d hasn't been sent to Philosopher 1
+Philosopher 1 already has Fork b3d
+WAIT for Philosopher 1 to have all forks
+Philosopher 1 has all forks
+WAIT ENDS Philosopher 1 has all forks
+Philosopher 1 eats
+Philosopher 2 already has Fork 5fd
+Philosopher 2 doesn't have request token
+Philosopher 2 already has Fork 6fb
+Philosopher 2 has requested all forks
+Fork 5fd hasn't been sent to Philosopher 2
+Philosopher 2 already has Fork 5fd
+Fork 6fb hasn't been sent to Philosopher 2
+Philosopher 2 already has Fork 6fb
+WAIT for Philosopher 2 to have all forks
+Philosopher 2 has all forks
+WAIT ENDS Philosopher 2 has all forks
+Philosopher 2 eats
+Philosopher 0 doesn't have request token
+Philosopher 0 already has Fork 172
+Philosopher 0 doesn't have request token
+Philosopher 0 already has Fork b3d
+Philosopher 0 doesn't have request token
+Philosopher 0 already has Fork 6ec
+Philosopher 0 has requested all forks
+Fork 172 hasn't been sent to Philosopher 0
+Philosopher 0 already has Fork 172
+Fork b3d hasn't been sent to Philosopher 0
+Philosopher 0 already has Fork b3d
+Fork 6ec hasn't been sent to Philosopher 0
+Philosopher 0 already has Fork 6ec
+WAIT for Philosopher 0 to have all forks
+Philosopher 0 has all forks
+WAIT ENDS Philosopher 0 has all forks
+Philosopher 0 eats
+Philosopher 4 doesn't have request token
+Philosopher 4 already has Fork 10d
+Philosopher 4 already has Fork 6ec
+Philosopher 4 has requested all forks
+Fork 10d hasn't been sent to Philosopher 4
+Philosopher 4 already has Fork 10d
+Fork 6ec hasn't been sent to Philosopher 4
+Philosopher 4 already has Fork 6ec
+WAIT for Philosopher 4 to have all forks
+Philosopher 4 has all forks
+WAIT ENDS Philosopher 4 has all forks
+Philosopher 4 eats
+Philosopher 3 sends fork Fork fe1
+Fork fe1Philosopher 3 sends fork Fork 10d
+Fork 10dPhilosopher 3 sends fork Fork 172
+Fork 172Philosopher 3 sends fork Fork 6fb
+Fork 6fbPhilosopher 3 has released all forks
+Philosopher 3 thinks
+Philosopher 2 sends fork Fork 5fd
+Fork 5fdPhilosopher 2 eating status THINKS
+Philosopher 2 has request token for Fork 6fb false
+Fork 6fb dirty? false
+Philosopher 2 doesn't send fork Fork 6fb
+Philosopher 2 has released all forks
+Philosopher 2 thinks
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork fe1 false
+Fork fe1 dirty? false
+Philosopher 1 doesn't send fork Fork fe1
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork 5fd false
+Fork 5fd dirty? false
+Philosopher 1 doesn't send fork Fork 5fd
+Philosopher 1 sends fork Fork b3d
+Fork b3dPhilosopher 1 has released all forks
+Philosopher 1 thinks
+Philosopher 4 eating status THINKS
+Philosopher 4 has request token for Fork 10d false
+Fork 10d dirty? false
+Philosopher 4 doesn't send fork Fork 10d
+Philosopher 4 sends fork Fork 6ec
+Fork 6ecPhilosopher 4 has released all forks
+Philosopher 4 thinks
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 172 false
+Fork 172 dirty? false
+Philosopher 0 doesn't send fork Fork 172
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork b3d false
+Fork b3d dirty? false
+Philosopher 0 doesn't send fork Fork b3d
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 6ec false
+Fork 6ec dirty? false
+Philosopher 0 doesn't send fork Fork 6ec
+Philosopher 0 has released all forks
+Philosopher 0 thinks
+Philosopher 4 is hungry
+Philosopher 0 is hungry
+Philosopher 2 is hungry
+Philosopher 1 is hungry
+Philosopher 3 is hungry
+Philosopher 0 doesn't have request token
+Philosopher 0 already has Fork 172
+Philosopher 0 doesn't have request token
+Philosopher 0 already has Fork b3d
+Philosopher 0 doesn't have request token
+Philosopher 0 already has Fork 6ec
+Philosopher 0 has requested all forks
+Philosopher 0 already has Fork 172
+Philosopher 0 already has Fork b3d
+Philosopher 0 already has Fork 6ec
+WAIT for Philosopher 0 to have all forks
+Philosopher 0 has all forks
+WAIT ENDS Philosopher 0 has all forks
+Philosopher 0 eats
+Philosopher 4 doesn't have request token
+Philosopher 4 already has Fork 10d
+Philosopher 4 requests Fork 6ec
+Philosopher 4 has requested all forks
+Philosopher 4 already has Fork 10d
+Philosopher 4 receives fork Fork@6eceb130
+WAIT for Philosopher 4 to have all forks
+Philosopher 4 has all forks
+WAIT ENDS Philosopher 4 has all forks
+Philosopher 4 eats
+Philosopher 1 doesn't have request token
+Philosopher 1 already has Fork fe1
+Philosopher 1 doesn't have request token
+Philosopher 1 already has Fork 5fd
+Philosopher 1 requests Fork b3d
+Philosopher 1 has requested all forks
+Philosopher 1 already has Fork fe1
+Philosopher 1 already has Fork 5fd
+Philosopher 1 receives fork Fork@b3d7190
+WAIT for Philosopher 1 to have all forks
+Philosopher 1 has all forks
+WAIT ENDS Philosopher 1 has all forks
+Philosopher 1 eats
+Philosopher 3 requests Fork fe1
+Philosopher 3 requests Fork 10d
+Philosopher 3 requests Fork 172
+Philosopher 3 requests Fork 6fb
+Philosopher 3 has requested all forks
+Philosopher 3 receives fork Fork@fe18270
+Philosopher 3 receives fork Fork@10d59286
+Philosopher 3 receives fork Fork@17211155
+Philosopher 3 receives fork Fork@6fb0d3ed
+WAIT for Philosopher 3 to have all forks
+Philosopher 3 has all forks
+WAIT ENDS Philosopher 3 has all forks
+Philosopher 3 eats
+Philosopher 2 requests Fork 5fd
+Philosopher 2 doesn't have request token
+Philosopher 2 already has Fork 6fb
+Philosopher 2 has requested all forks
+Philosopher 2 receives fork Fork@5fdba6f9
+Fork 6fb hasn't been sent to Philosopher 2
+Philosopher 2 already has Fork 6fb
+WAIT for Philosopher 2 to have all forks
+Philosopher 2 has all forks
+WAIT ENDS Philosopher 2 has all forks
+Philosopher 2 eats
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 172 false
+Fork 172 dirty? true
+Philosopher 0 doesn't send fork Fork 172
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork b3d false
+Fork b3d dirty? true
+Philosopher 0 doesn't send fork Fork b3d
+Philosopher 0 eating status THINKS
+Philosopher 0 has request token for Fork 6ec false
+Fork 6ec dirty? true
+Philosopher 0 doesn't send fork Fork 6ec
+Philosopher 0 has released all forks
+Philosopher 0 thinks
+Philosopher 1 eating status THINKS
+Philosopher 1 has request token for Fork fe1 false
+Fork fe1 dirty? true
+  C-c C-cbash-3.2$ 
