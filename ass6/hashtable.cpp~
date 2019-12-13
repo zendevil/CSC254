@@ -1,0 +1,31 @@
+#include <vector>
+template<typename T>
+class HashEntry {
+  T val;
+  HashEntry* next;
+  
+};
+
+template<typename T>
+class HashMap {
+
+  int SIZE;
+  std::vector<HashEntry*> table;
+  HashMap(int s) : SIZE(s) {
+    table = new vector<HashEntry*>(SIZE);
+  }
+
+  void put(T item) {
+    
+  }
+
+
+  
+
+};
+
+
+int main() {
+
+  HashMap m = new HashMap(7);
+}

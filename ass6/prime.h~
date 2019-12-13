@@ -1,0 +1,2 @@
+bool check_special_prime(bool* sieve, int num); 
+void find_special_prime(int N);

@@ -1,0 +1,3 @@
+template<typename T> class HashEntry;
+template<typename T>
+class HashMap
